@@ -1,5 +1,5 @@
 name: health_app_repo
-description: Flutter GoogleFit and AppleHealthKit App
+description: App to exercise Health and Geofencing
 
 publish_to: 'none' # Remove this line if you wish to publish to pub.dev
 
@@ -12,8 +12,11 @@ dependencies:
   flutter:
     sdk: flutter
 
+
   cupertino_icons: ^1.0.3
-  health: ^3.0.5
+  flutter_geofence: ^0.4.1
+  activity_recognition_flutter: ^4.0.0
+  geolocator: ^7.0.3
 
 dev_dependencies:
   flutter_test:
@@ -27,3 +30,4 @@ flutter:
   # assets:
   #   - images/a_dot_burr.jpeg
   #   - images/a_dot_ham.jpeg
+
