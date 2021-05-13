@@ -18,8 +18,8 @@ class _GeofencePageState extends State<GeofencePage>
   void initState() {
     _controller = AnimationController(vsync: this);
     super.initState();
-    _getCurrentPosition();
     _startFences();
+    _listen();
   }
 
   @override
@@ -28,11 +28,9 @@ class _GeofencePageState extends State<GeofencePage>
     super.dispose();
   }
 
-  void _getCurrentPosition() async {
-    debugPrint('$mm ..... _getCurrentPosition starting ............');
-    var pos = await _geofencer.getCurrentPosition();
-    debugPrint('$mm _getCurrentPosition: 🍎 result from _getCurrentPosition:  '
-        '🅿️ latitude: ${pos.latitude}  🅿️ longitude: ${pos.longitude}  🅿️ ');
+  void _listen() {
+    debugPrint('$mm ..... _listen: 🍐 🍐 🍐 listenToBackgroundLocation ....');
+    _geofencer.listenToBackgroundLocation(this);
   }
 
   void _startFences() async {
@@ -55,7 +53,6 @@ class _GeofencePageState extends State<GeofencePage>
           IconButton(
               icon: Icon(Icons.refresh),
               onPressed: () {
-                _getCurrentPosition();
                 _startFences();
               })
         ],

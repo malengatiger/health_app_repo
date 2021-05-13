@@ -49,23 +49,28 @@ class Geofencer {
 
     Geofence.startListening(GeolocationEvent.entry, (entry) {
       //scheduleNotification("Entry of a georegion", "Welcome to: ${entry.id}");
-      debugPrint('$mm Geofence has been fired for ENTRY:  🛎 🛎 🛎 🛎 $entry');
+      debugPrint(
+          '$mm Geofence has been fired for ENTRY:  🛎 🛎 🛎 🛎 lat: ${entry.latitude} lng: ${entry.longitude}');
       listener.onGeofenceEntry(entry);
     });
 
     Geofence.startListening(GeolocationEvent.exit, (exit) {
       //scheduleNotification("Entry of a georegion", "Welcome to: ${entry.id}");
-      debugPrint('$mm Geofence has been fired for EXIT:  🛎 🛎 🛎 🛎 $exit');
+      debugPrint(
+          '$mm Geofence has been fired for EXIT:  🛎 🛎 🛎 🛎  lat: ${exit.latitude} lng: ${exit.longitude}');
       listener.onGeofenceEntry(exit);
     });
+
+    return '✅ ✅ Geofence has been added for both enter and exit ✅ ✅ listeners set up 🔺🔺🔺';
+  }
+
+  void listenToBackgroundLocation(GeofencerListener listener) {
     Geofence.backgroundLocationUpdated.stream.listen((event) {
       // scheduleNotification("You moved significantly", "a significant location change just happened.");
       debugPrint(
           '$mm Geofence backgroundLocationUpdated: 🔷 🔷 🔷 🔷  ${event.latitude} ${event.longitude}');
       listener.onBackgroundLocation(event);
     });
-
-    return '✅ ✅ Geofence has been added for both enter and exit ✅ ✅ listeners set up 🔺🔺🔺';
   }
 
   Future<Position> getCurrentPosition() async {
