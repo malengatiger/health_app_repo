@@ -21,7 +21,7 @@ class Geofencer {
 
   static final Geofencer instance = Geofencer._privateConstructor();
 
-  Future buildGeofences(GeofencerListener listener) async {
+  Future<Position> buildGeofence(GeofencerListener listener) async {
     debugPrint('$mm will be building geofences: requesting permission ...');
     Geofence.requestPermissions();
     var pos = await getCurrentPosition();
@@ -30,6 +30,7 @@ class Geofencer {
         longitude: pos.longitude,
         radius: 200,
         id: 'myLocation');
+
     await Geofence.addGeolocation(location, GeolocationEvent.entry)
         .then((onValue) {
       //scheduleNotification("Georegion added", "Your geofence has been added!");
@@ -61,7 +62,9 @@ class Geofencer {
       listener.onGeofenceEntry(exit);
     });
 
-    return '✅ ✅ Geofence has been added for both enter and exit ✅ ✅ listeners set up 🔺🔺🔺';
+    debugPrint(
+        '✅ ✅ Geofence has been added for both enter and exit ✅ ✅ listeners set up 🔺🔺🔺');
+    return pos;
   }
 
   void listenToBackgroundLocation(GeofencerListener listener) {

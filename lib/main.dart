@@ -3,7 +3,12 @@ import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 
 import 'geofence_page.dart';
 
+final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
+    FlutterLocalNotificationsPlugin();
+
 void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+
   runApp(MyApp());
 
   debugPrint('$mm App main: FlutterLocalNotificationsPlugin initializing ...');
@@ -43,14 +48,14 @@ class MyApp extends StatelessWidget {
   }
 }
 
-Future onDidReceiveLocalNotification(
-    int id, String title, String body, String payload) {
+Future<String> onDidReceiveLocalNotification(
+    int id, String title, String body, String payload) async {
   debugPrint(
       '$mm onDidReceiveLocalNotification:🍏 title: $title 🍏 payload: $payload 🍏 body: $body ');
-  return null;
+  return payload;
 }
 
-Future selectNotification(String payload) {
+Future selectNotification(String payload) async {
   debugPrint('$mm selectNotification: 🍏 payload: $payload');
   return null;
 }
