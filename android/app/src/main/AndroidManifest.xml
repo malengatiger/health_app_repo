@@ -4,6 +4,9 @@
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_BACKGROUND_LOCATION" />
+    <uses-permission android:name="android.permission.ACTIVITY_RECOGNITION" />
+    <uses-permission android:name="com.google.android.gms.permission.ACTIVITY_RECOGNITION" />
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
    <application
         android:label="health_app_repo"
         android:icon="@mipmap/ic_launcher">
@@ -11,6 +14,8 @@
            android:enabled="true" android:exported="true"/>
        <service android:name="com.intivoto.geofence.GeofencePlugin"
            android:permission="android.permission.BIND_JOB_SERVICE" android:exported="true"/>
+       <service android:name="dk.cachet.activity_recognition_flutter.ActivityRecognizedService" />
+       <service android:name="dk.cachet.activity_recognition_flutter.ForegroundService" />
         <activity
             android:name=".MainActivity"
             android:launchMode="singleTop"

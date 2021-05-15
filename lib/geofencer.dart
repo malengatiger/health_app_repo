@@ -1,6 +1,7 @@
-import 'package:flutter/foundation.dart';
 import 'package:flutter_geofence/geofence.dart';
 import 'package:geolocator/geolocator.dart';
+
+import 'functions_and_shit.dart';
 
 final Geofencer geofencer = Geofencer.instance;
 
@@ -15,14 +16,13 @@ class Geofencer {
 
   Geofencer._privateConstructor() {
     Geofence.initialize();
-    debugPrint(
-        '$mm Geofencer has been initialized : 🌺 ${DateTime.now().toIso8601String()} 🌺');
+    pp('$mm Geofencer has been initialized : 🌺 ${DateTime.now().toIso8601String()} 🌺');
   }
 
   static final Geofencer instance = Geofencer._privateConstructor();
 
   Future<Position> buildGeofence(GeofencerListener listener) async {
-    debugPrint('$mm will be building geofences: requesting permission ...');
+    pp('$mm will be building geofences: requesting permission ...');
     Geofence.requestPermissions();
     var pos = await getCurrentPosition();
     var location = Geolocation(
@@ -34,44 +34,40 @@ class Geofencer {
     await Geofence.addGeolocation(location, GeolocationEvent.entry)
         .then((onValue) {
       //scheduleNotification("Georegion added", "Your geofence has been added!");
-      debugPrint('$mm Geofence has been added for ENTRY: 💙 💙 💙 ');
+      pp('$mm Geofence has been added for ENTRY: 💙 💙 💙 ');
     }).catchError((error) {
-      print("failed with $error");
+      pp("failed with $error");
       throw Exception('😈 👿 We are fucked, Boss! $error');
     });
     await Geofence.addGeolocation(location, GeolocationEvent.exit)
         .then((onValue) {
       //scheduleNotification("Georegion added", "Your geofence has been added!");
-      debugPrint('$mm Geofence has been added for EXIT:  ❤️ ❤️ ❤️');
+      pp('$mm Geofence has been added for EXIT:  ❤️ ❤️ ❤️');
     }).catchError((error) {
-      print("failed with $error");
+      pp("failed with $error");
       throw Exception('😈 👿 We are fucked, Boss! $error');
     });
 
     Geofence.startListening(GeolocationEvent.entry, (entry) {
       //scheduleNotification("Entry of a georegion", "Welcome to: ${entry.id}");
-      debugPrint(
-          '$mm Geofence has been fired for ENTRY:  🛎 🛎 🛎 🛎 lat: ${entry.latitude} lng: ${entry.longitude}');
+      pp('$mm Geofence has been fired for ENTRY:  🛎 🛎 🛎 🛎 lat: ${entry.latitude} lng: ${entry.longitude}');
       listener.onGeofenceEntry(entry);
     });
 
     Geofence.startListening(GeolocationEvent.exit, (exit) {
       //scheduleNotification("Entry of a georegion", "Welcome to: ${entry.id}");
-      debugPrint(
-          '$mm Geofence has been fired for EXIT:  🛎 🛎 🛎 🛎  lat: ${exit.latitude} lng: ${exit.longitude}');
+      pp('$mm Geofence has been fired for EXIT:  🛎 🛎 🛎 🛎  lat: ${exit.latitude} lng: ${exit.longitude}');
       listener.onGeofenceEntry(exit);
     });
 
-    debugPrint(
-        '✅ ✅ Geofence has been added for both enter and exit ✅ ✅ listeners set up 🔺🔺🔺');
+    pp('✅ ✅ Geofence has been added for both enter and exit ✅ ✅ listeners set up 🔺🔺🔺');
     return pos;
   }
 
   void listenToBackgroundLocation(GeofencerListener listener) {
     Geofence.backgroundLocationUpdated.stream.listen((event) {
       // scheduleNotification("You moved significantly", "a significant location change just happened.");
-      debugPrint(
-          '$mm Geofence backgroundLocationUpdated: 🔷 🔷 🔷 🔷  ${event.latitude} ${event.longitude}');
+      pp('$mm Geofence backgroundLocationUpdated: 🔷 🔷 🔷 🔷  ${event.latitude} ${event.longitude}');
       listener.onBackgroundLocation(event);
     });
   }
@@ -102,8 +98,7 @@ class Geofencer {
     // When we reach here, permissions are granted and we can
     // continue accessing the position of the device.
     var pos = await Geolocator.getCurrentPosition();
-    debugPrint(
-        '$mm Position via Geolocator: 🌀 🌀 latitude: ${pos.latitude} 🌀 🌀 longitude: ${pos.longitude}');
+    pp('$mm Position via Geolocator: 🌀 🌀 latitude: ${pos.latitude} 🌀 🌀 longitude: ${pos.longitude}');
 
     return pos;
   }

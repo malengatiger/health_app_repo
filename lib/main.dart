@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+import 'package:google_fonts/google_fonts.dart';
 
+import 'functions_and_shit.dart';
 import 'geofence_page.dart';
 
 final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
@@ -11,26 +13,25 @@ void main() async {
 
   runApp(MyApp());
 
-  debugPrint('$mm App main: FlutterLocalNotificationsPlugin initializing ...');
+  pp('$mm App main: FlutterLocalNotificationsPlugin initializing ...');
 
   FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
       FlutterLocalNotificationsPlugin();
   const AndroidInitializationSettings initializationSettingsAndroid =
       AndroidInitializationSettings('ic_launcher');
-  final IOSInitializationSettings initializationSettingsIOS =
-      IOSInitializationSettings(
-          onDidReceiveLocalNotification: onDidReceiveLocalNotification);
+  // final IOSInitializationSettings initializationSettingsIOS =
+  //     IOSInitializationSettings(
+  //         onDidReceiveLocalNotification: onDidReceiveLocalNotification);
   final MacOSInitializationSettings initializationSettingsMacOS =
       MacOSInitializationSettings();
-  final InitializationSettings initializationSettings = InitializationSettings(
-      android: initializationSettingsAndroid,
-      iOS: initializationSettingsIOS,
-      macOS: initializationSettingsMacOS);
-  await flutterLocalNotificationsPlugin.initialize(initializationSettings,
-      onSelectNotification: selectNotification);
+  // final InitializationSettings initializationSettings = InitializationSettings(
+  //     android: initializationSettingsAndroid,
+  //     iOS: initializationSettingsIOS,
+  //     macOS: initializationSettingsMacOS);
+  // await flutterLocalNotificationsPlugin.initialize(initializationSettings,
+  //     onSelectNotification: selectNotification);
 
-  debugPrint(
-      '$mm App main: 🍊 🍊 FlutterLocalNotificationsPlugin initialized 🍊 🍊 ');
+  pp('$mm App main: 🍊 🍊 FlutterLocalNotificationsPlugin initialized 🍊 🍊 ');
 }
 
 class MyApp extends StatelessWidget {
@@ -42,6 +43,9 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
         primarySwatch: Colors.indigo,
+        textTheme: GoogleFonts.fredokaOneTextTheme(
+          Theme.of(context).textTheme,
+        ),
       ),
       home: GeofencePage(),
     );
@@ -50,13 +54,12 @@ class MyApp extends StatelessWidget {
 
 Future<String> onDidReceiveLocalNotification(
     int id, String title, String body, String payload) async {
-  debugPrint(
-      '$mm onDidReceiveLocalNotification:🍏 title: $title 🍏 payload: $payload 🍏 body: $body ');
+  pp('$mm onDidReceiveLocalNotification:🍏 title: $title 🍏 payload: $payload 🍏 body: $body ');
   return payload;
 }
 
 Future selectNotification(String payload) async {
-  debugPrint('$mm selectNotification: 🍏 payload: $payload');
+  pp('$mm selectNotification: 🍏 payload: $payload');
   return null;
 }
 
