@@ -6,11 +6,10 @@ import 'package:connectivity/connectivity.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
-import 'package:flutter_geofence/geofence.dart';
+import 'package:geofence_service/geofence_service.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:health_app_repo/events_page.dart';
 import 'package:health_app_repo/geofence_location.dart';
-import 'package:health_app_repo/geofencer.dart';
 import 'package:health_app_repo/health_page.dart';
 import 'package:health_app_repo/map.dart';
 import 'package:health_app_repo/util/functions.dart';
@@ -20,6 +19,7 @@ import 'package:permission_handler/permission_handler.dart';
 
 import 'functions_and_shit.dart';
 import 'hive_db.dart';
+import 'service_le_geofence.dart';
 
 class GeofencePage extends StatefulWidget {
   @override
@@ -27,11 +27,9 @@ class GeofencePage extends StatefulWidget {
 }
 
 class _GeofencePageState extends State<GeofencePage>
-    with SingleTickerProviderStateMixin
-    implements GeofencerListener {
+    with SingleTickerProviderStateMixin {
   late AnimationController _controller;
-  static const mm = '🌸 🌸 🌸 🌸 🌸  GeofencePage: ';
-  Geofencer _geofencer = geofencer;
+  static const mm = '🌸 🌸 🌸 🌸 🌸 GeofencePage: ';
   List<GeofenceLocation> _geofenceLocations = [];
   @override
   void initState() {
@@ -84,12 +82,17 @@ class _GeofencePageState extends State<GeofencePage>
   @override
   void dispose() {
     _controller.dispose();
+    _subscription!.cancel();
     super.dispose();
   }
 
   bool connected = false;
   void _checkConnectivity() async {
+    pp('$mm ....................................'
+        ' checkNetworkConnectivity: 🍐 🍐 🍐');
     connected = await checkNetworkConnectivity();
+    pp('$mm ....................................'
+        ' checkNetworkConnectivity: 🍐 🍐 🍐 connected: 💪 $connected 💪 ');
     if (connected) {
       _listen();
       await _startFences();
@@ -100,7 +103,6 @@ class _GeofencePageState extends State<GeofencePage>
 
   void _listen() {
     pp('$mm ..... _listen: 🍐 🍐 🍐 listenToBackgroundLocation and onConnectivityChanged ....  🍐 ');
-    _geofencer.listenToBackgroundLocation(this);
     _subscription = Connectivity()
         .onConnectivityChanged
         .listen((ConnectivityResult result) {
@@ -120,20 +122,23 @@ class _GeofencePageState extends State<GeofencePage>
   }
 
   Future _getEvents() async {
-    pp('$mm getting events from disk ...');
+    pp('$mm getGeofenceEvents: getting events from local disk ...');
     _geofenceEvents = await LocalDB.getGeofenceEvents();
   }
 
   Future _startFences() async {
-    pp('$mm ..... buildGeofence will be called  ....');
+    pp('$mm ..... getting current position and building geofences from local disk ....');
     setState(() {
       busy = true;
     });
     _position = await Geolocator.getCurrentPosition();
     _geofenceLocations = await LocalDB.getGeofenceLocations();
-    await _geofencer.buildGeofences(
-        locations: _geofenceLocations, listener: this);
-    pp('$mm ..... startFences: 🍎 position from buildGeofence: ${_position!.latitude} ${_position!.longitude} 🍎');
+    await serviceLeGeofence.buildGeofences(locations: _geofenceLocations);
+
+    pp('$mm ..... startFences: 🍎 '
+        'current position of device: lat: ${_position!.latitude} '
+        'lng: ${_position!.longitude} 🍎');
+
     setState(() {
       busy = false;
     });
@@ -150,6 +155,7 @@ class _GeofencePageState extends State<GeofencePage>
             child: EventsPage(
               events: _geofenceEvents,
             )));
+    _startFences();
   }
 
   void _navigateToMap() async {
@@ -162,12 +168,12 @@ class _GeofencePageState extends State<GeofencePage>
             duration: Duration(milliseconds: 1000),
             child: GeofenceMap()));
 
-    setState(() {});
+    _startFences();
   }
 
   void _navigateToHealthData() async {
     pp('$mm ..... _navigateToMap  ....');
-    Navigator.push(
+    await Navigator.push(
         context,
         PageTransition(
             type: PageTransitionType.scale,
@@ -175,7 +181,7 @@ class _GeofencePageState extends State<GeofencePage>
             duration: Duration(milliseconds: 1000),
             child: HealthPage()));
 
-    setState(() {});
+    _startFences();
   }
 
   @override
@@ -251,188 +257,238 @@ class _GeofencePageState extends State<GeofencePage>
                         SizedBox(
                           height: 8,
                         ),
-                        Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: Card(
-                            elevation: 4,
-                            child: _position == null
-                                ? Text('Geofence is to be loaded ..',
-                                    style: Theme.of(context).textTheme.caption)
-                                : Padding(
-                                    padding: const EdgeInsets.all(8.0),
-                                    child: Column(
-                                      children: [
-                                        SizedBox(
-                                          height: 12,
-                                        ),
-                                        Row(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.center,
-                                          children: [
-                                            Text(
-                                              '${_geofenceLocations.length}',
-                                              style: Styles.blueBoldMedium,
-                                            ),
-                                            SizedBox(
-                                              width: 8,
-                                            ),
-                                            Text(
-                                              'Geofence Locations',
-                                              style: Theme.of(context)
-                                                  .textTheme
-                                                  .headline6,
-                                            ),
-                                          ],
-                                        ),
-                                        SizedBox(
-                                          height: 12,
-                                        ),
-                                        Row(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.center,
-                                          children: [
-                                            Text('Network Connection'),
-                                            SizedBox(
-                                              width: 8,
-                                            ),
-                                            connected
-                                                ? Container(
-                                                    decoration: BoxDecoration(
-                                                        color: Colors.teal[600],
-                                                        shape: BoxShape.circle),
-                                                    width: 12,
-                                                    height: 12,
-                                                  )
-                                                : Container(
-                                                    decoration: BoxDecoration(
-                                                        color: Colors.pink[600],
-                                                        shape: BoxShape.circle),
-                                                    width: 12,
-                                                    height: 12,
-                                                  )
-                                          ],
-                                        ),
-                                        SizedBox(
-                                          height: 20,
-                                        ),
-                                        Column(
-                                          children: [
-                                            Row(
-                                              mainAxisAlignment:
-                                                  MainAxisAlignment.center,
-                                              children: [
-                                                SizedBox(
-                                                    width: 80,
-                                                    child: Text('Latitude')),
-                                                SizedBox(
-                                                  width: 8,
-                                                ),
-                                                Text(
-                                                  '${_position!.latitude}',
-                                                  style: TextStyle(
-                                                      fontWeight:
-                                                          FontWeight.w900,
-                                                      color: Theme.of(context)
-                                                          .accentColor),
-                                                ),
-                                              ],
-                                            ),
-                                            SizedBox(
-                                              height: 8,
-                                            ),
-                                            Row(
-                                              mainAxisAlignment:
-                                                  MainAxisAlignment.center,
-                                              children: [
-                                                SizedBox(
-                                                    width: 80,
-                                                    child: Text('Longitude')),
-                                                SizedBox(
-                                                  width: 8,
-                                                ),
-                                                Text(
-                                                  '${_position!.longitude}',
-                                                  style: TextStyle(
-                                                      fontWeight:
-                                                          FontWeight.w900,
-                                                      color: Theme.of(context)
-                                                          .primaryColor),
-                                                ),
-                                              ],
-                                            ),
-                                            SizedBox(
-                                              height: 28,
-                                            ),
-                                          ],
-                                        ),
-                                      ],
-                                    ),
-                                  ),
-                          ),
-                        ),
-                        SizedBox(
-                          height: 24,
-                        ),
-                        enteredLocation == null
-                            ? Container(
-                                child: Text(
-                                  'No entry recorded',
-                                  style: TextStyle(
-                                      color: Colors.grey,
-                                      fontWeight: FontWeight.bold,
-                                      fontSize: 20),
-                                ),
-                              )
-                            : Card(
-                                elevation: 8,
-                                color: Colors.teal[700],
-                                child: Padding(
-                                  padding: const EdgeInsets.all(32.0),
+                        Card(
+                          elevation: 4,
+                          child: _position == null
+                              ? Text('Geofence is to be loaded ..',
+                                  style: Theme.of(context).textTheme.caption)
+                              : Padding(
+                                  padding: const EdgeInsets.all(8.0),
                                   child: Column(
                                     children: [
-                                      Text(
-                                        'Entered Geofence',
-                                        style: TextStyle(
-                                            color: Colors.white,
-                                            fontWeight: FontWeight.bold,
-                                            fontSize: 24),
+                                      SizedBox(
+                                        height: 12,
+                                      ),
+                                      Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.center,
+                                        children: [
+                                          Text(
+                                            '${_geofenceLocations.length}',
+                                            style: Styles.blueBoldMedium,
+                                          ),
+                                          SizedBox(
+                                            width: 8,
+                                          ),
+                                          Text(
+                                            'Geofence Locations',
+                                            style: Theme.of(context)
+                                                .textTheme
+                                                .headline6,
+                                          ),
+                                        ],
                                       ),
                                       SizedBox(
-                                        height: 8,
+                                        height: 12,
                                       ),
-                                      Text('${enteredLocation!.name}'),
-                                      Text(
-                                        '${DateTime.now().toIso8601String()}',
-                                        style: TextStyle(
-                                            color: Colors.white, fontSize: 10),
+                                      Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.center,
+                                        children: [
+                                          Text('Network Connection'),
+                                          SizedBox(
+                                            width: 8,
+                                          ),
+                                          connected
+                                              ? Container(
+                                                  decoration: BoxDecoration(
+                                                      color: Colors.teal[600],
+                                                      shape: BoxShape.circle),
+                                                  width: 12,
+                                                  height: 12,
+                                                )
+                                              : Container(
+                                                  decoration: BoxDecoration(
+                                                      color: Colors.pink[600],
+                                                      shape: BoxShape.circle),
+                                                  width: 12,
+                                                  height: 12,
+                                                )
+                                        ],
+                                      ),
+                                      SizedBox(
+                                        height: 20,
+                                      ),
+                                      Column(
+                                        children: [
+                                          Row(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.center,
+                                            children: [
+                                              SizedBox(
+                                                  width: 80,
+                                                  child: Text('Latitude')),
+                                              SizedBox(
+                                                width: 8,
+                                              ),
+                                              Text(
+                                                '${_position!.latitude}',
+                                                style: TextStyle(
+                                                    fontWeight: FontWeight.w900,
+                                                    color: Theme.of(context)
+                                                        .accentColor),
+                                              ),
+                                            ],
+                                          ),
+                                          SizedBox(
+                                            height: 8,
+                                          ),
+                                          Row(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.center,
+                                            children: [
+                                              SizedBox(
+                                                  width: 80,
+                                                  child: Text('Longitude')),
+                                              SizedBox(
+                                                width: 8,
+                                              ),
+                                              Text(
+                                                '${_position!.longitude}',
+                                                style: TextStyle(
+                                                    fontWeight: FontWeight.w900,
+                                                    color: Theme.of(context)
+                                                        .primaryColor),
+                                              ),
+                                            ],
+                                          ),
+                                          SizedBox(
+                                            height: 28,
+                                          ),
+                                        ],
                                       ),
                                     ],
                                   ),
                                 ),
-                              ),
+                        ),
                         SizedBox(
                           height: 24,
                         ),
-                        exitedLocation == null
-                            ? Container(
-                                child: Text(
-                                  'No exit recorded',
-                                  style: TextStyle(
-                                      color: Colors.grey,
-                                      fontWeight: FontWeight.bold,
-                                      fontSize: 20),
-                                ),
-                              )
-                            : Card(
-                                color: Colors.pink,
-                                child: Padding(
-                                  padding: const EdgeInsets.all(8.0),
-                                  child: Text(
-                                    'Exited Geofence',
-                                    style: TextStyle(color: Colors.white),
-                                  ),
-                                ),
-                              ),
+                        Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: StreamBuilder<Geofence>(
+                              stream: serviceLeGeofence.geofenceStream,
+                              builder: (context, snapshot) {
+                                Geofence? geo;
+                                if (snapshot.hasData) {
+                                  geo = snapshot.data!;
+                                  pp('${geo.status.toString()}');
+                                }
+
+                                if (geo != null) {
+                                  if (geo.status.toString().contains('DWELL')) {
+                                    var card = Card(
+                                      elevation: 4,
+                                      color: Colors.teal[700],
+                                      child: Padding(
+                                        padding: const EdgeInsets.all(24.0),
+                                        child: Column(
+                                          children: [
+                                            Text(
+                                              'Geofence Dwelled',
+                                              style: Styles.whiteBoldMedium,
+                                            ),
+                                            SizedBox(
+                                              height: 12,
+                                            ),
+                                            Text(
+                                              '${geo.id}',
+                                              style: Styles.whiteSmall,
+                                            ),
+                                            SizedBox(
+                                              height: 4,
+                                            ),
+                                            Text(
+                                              '${getFormattedDateShortWithTime('${geo.timestamp!.toIso8601String()}', context)}',
+                                              style: Styles.whiteSmall,
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                                    );
+                                    return card;
+                                  }
+                                  if (geo.status.toString().contains('ENTER')) {
+                                    var card = Card(
+                                      elevation: 4,
+                                      color: Colors.teal[300],
+                                      child: Padding(
+                                        padding: const EdgeInsets.all(24.0),
+                                        child: Column(
+                                          children: [
+                                            Text(
+                                              'Geofence Entered',
+                                              style: Styles.whiteBoldMedium,
+                                            ),
+                                            SizedBox(
+                                              height: 12,
+                                            ),
+                                            Text(
+                                              '${geo.id}',
+                                              style: Styles.whiteSmall,
+                                            ),
+                                            SizedBox(
+                                              height: 4,
+                                            ),
+                                            Text(
+                                              '${getFormattedDateShortWithTime('${geo.timestamp!.toIso8601String()}', context)}',
+                                              style: Styles.whiteSmall,
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                                    );
+                                    return card;
+                                  }
+                                  if (geo.status.toString().contains('EXIT')) {
+                                    var card = Card(
+                                      elevation: 4,
+                                      color: Colors.pink[700],
+                                      child: Padding(
+                                        padding: const EdgeInsets.all(24.0),
+                                        child: Column(
+                                          children: [
+                                            Text(
+                                              'Geofence Exited',
+                                              style: Styles.whiteBoldMedium,
+                                            ),
+                                            SizedBox(
+                                              height: 12,
+                                            ),
+                                            Text(
+                                              '${geo.id}',
+                                              style: Styles.whiteSmall,
+                                            ),
+                                            SizedBox(
+                                              height: 4,
+                                            ),
+                                            Text(
+                                              '${getFormattedDateShortWithTime('${geo.timestamp!.toIso8601String()}', context)}',
+                                              style: Styles.whiteSmall,
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                                    );
+                                    return card;
+                                  }
+                                }
+                                return Text(
+                                  'No Geofence Event Yet',
+                                  style: Styles.greyLabelMedium,
+                                );
+                              }),
+                        ),
                         SizedBox(
                           height: 24,
                         ),
@@ -493,31 +549,20 @@ class _GeofencePageState extends State<GeofencePage>
   }
 
   GeofenceLocation? enteredLocation, exitedLocation;
-  Coordinate? backgroundLocation;
 
-  @override
   onGeofenceEntry(GeofenceLocation geolocation) {
-    pp('$mm onGeofenceEntry: geoLocation at ENTRY: 🔵  lat: ${geolocation.latitude} 🔵 lng: ${geolocation.longitude} 💚 💚 💚');
+    pp('$mm onGeofenceEntry: geoLocation at ENTRY: '
+        '🔵  lat: ${geolocation.latitude} 🔵 lng: ${geolocation.longitude} 💚 💚 💚');
     setState(() {
       enteredLocation = geolocation;
-      exitedLocation = null;
     });
   }
 
-  @override
   onGeofenceExit(GeofenceLocation geolocation) {
-    pp('$mm onGeofenceExit: geoLocation at EXIT:  🔵 lat: ${geolocation.latitude} 🔵 lng: ${geolocation.longitude} ❤️ ❤️ ❤️');
+    pp('$mm onGeofenceExit: geoLocation at EXIT:  '
+        '🔵 lat: ${geolocation.latitude} 🔵 lng: ${geolocation.longitude} ❤️ ❤️ ❤️');
     setState(() {
-      enteredLocation = null;
       exitedLocation = geolocation;
-    });
-  }
-
-  @override
-  onBackgroundLocation(Coordinate coordinate) {
-    pp('$mm onBackgroundLocation: coordinates: 🥦 lat: ${coordinate.latitude} 🥦 lng: ${coordinate.longitude} 🥦 ');
-    setState(() {
-      backgroundLocation = coordinate;
     });
   }
 }

@@ -32,15 +32,22 @@ class GeofenceLocationEvent {
   String? eventId;
   String? date;
   GeofenceLocation? geofenceLocation;
-  bool? entered;
+  bool? entered, dwelled, exited;
 
   GeofenceLocationEvent(
-      {this.eventId, this.geofenceLocation, this.date, this.entered});
+      {required this.eventId,
+      required this.geofenceLocation,
+      required this.date,
+      required this.entered,
+      required this.dwelled,
+      required this.exited});
 
   GeofenceLocationEvent.fromJson(Map data) {
     this.eventId = data['eventId'];
     this.date = data['date'];
     this.entered = data['entered'];
+    this.dwelled = data['dwelled'];
+    this.exited = data['exited'];
 
     if (data['geofenceLocation'] != null) {
       this.geofenceLocation =
@@ -52,6 +59,8 @@ class GeofenceLocationEvent {
         'eventId': eventId,
         'date': date,
         'entered': entered,
+        'dwelled': dwelled,
+        'exited': exited,
         'geofenceLocation':
             geofenceLocation == null ? null : geofenceLocation!.toJson()
       };

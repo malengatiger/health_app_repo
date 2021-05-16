@@ -6,7 +6,6 @@ import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:health_app_repo/functions_and_shit.dart';
 import 'package:health_app_repo/geofence_location.dart';
-import 'package:health_app_repo/geofencer.dart';
 import 'package:health_app_repo/hive_db.dart';
 import 'package:health_app_repo/util/functions.dart';
 
@@ -19,7 +18,6 @@ class _GeofenceMapState extends State<GeofenceMap>
     with SingleTickerProviderStateMixin {
   late AnimationController _controller;
   Completer<GoogleMapController> _mapController = Completer();
-  Geofencer _geofencer = Geofencer.instance;
 
   CameraPosition? _myCurrentCameraPosition;
   static const mm = '💙 💙 💙 💙 💙 💙 Map: ';
@@ -36,7 +34,7 @@ class _GeofenceMapState extends State<GeofenceMap>
   Position? _currentPosition;
   void _getCurrentLocation() async {
     pp('$mm .......... get current location ....');
-    _currentPosition = await _geofencer.getCurrentPosition();
+    _currentPosition = await Geolocator.getCurrentPosition();
     if (_currentPosition == null) {
       pp('$mm  👿 👿 👿 👿.......... _currentPosition is null ....');
       return;

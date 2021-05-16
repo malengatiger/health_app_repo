@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+import 'package:geofence_service/geofence_service.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 import 'functions_and_shit.dart';
@@ -38,8 +39,22 @@ class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
+    // return MaterialApp(
+    //   title: 'Geofencer',
+    //   debugShowCheckedModeBanner: false,
+    //   theme: ThemeData(
+    //     primarySwatch: Colors.indigo,
+    //     textTheme: GoogleFonts.ralewayTextTheme(
+    //       Theme.of(context).textTheme,
+    //     ),
+    //   ),
+    //   // home: HealthPage(),
+    //   home: GeofencePage(),
+    //   // home: GeofenceMap(),
+    // );
     return MaterialApp(
-      title: 'Geofencer',
+      // A widget used when you want to start a foreground task when trying to minimize or close the app.
+      // Declare on top of the [Scaffold] widget.
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
         primarySwatch: Colors.indigo,
@@ -47,9 +62,21 @@ class MyApp extends StatelessWidget {
           Theme.of(context).textTheme,
         ),
       ),
-      // home: HealthPage(),
-      home: GeofencePage(),
-      // home: GeofenceMap(),
+      home: WillStartForegroundTask(
+          onWillStart: () {
+            // You can add a foreground task start condition.
+            return true;
+          },
+          notificationOptions: NotificationOptions(
+              channelId: 'geofence_service_notification_channel',
+              channelName: 'Geofence Service Notification',
+              channelDescription:
+                  'This notification appears when the geofence service is running in the background.',
+              channelImportance: NotificationChannelImportance.LOW,
+              priority: NotificationPriority.LOW),
+          notificationTitle: 'Geofence Service is running',
+          notificationText: 'Tap to return to the app',
+          child: GeofencePage()),
     );
   }
 }
