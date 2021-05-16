@@ -36,6 +36,7 @@ class Geofencer {
       required GeofencerListener listener}) async {
     pp('$mm will be building geofences: requesting permission ...');
     Geofence.requestPermissions();
+
     var location = Geolocation(
         latitude: geofenceLocation.latitude!,
         longitude: geofenceLocation.longitude!,
@@ -44,41 +45,46 @@ class Geofencer {
 
     await Geofence.addGeolocation(location, GeolocationEvent.entry)
         .then((onValue) {
-      //scheduleNotification("Georegion added", "Your geofence has been added!");
       pp('$mm Geofence has been added for ENTRY: 💙 💙 💙 ');
     }).catchError((error) {
       pp("failed with $error");
       throw Exception('😈 👿 We are fucked, Boss! $error');
     });
+
     await Geofence.addGeolocation(location, GeolocationEvent.exit)
         .then((onValue) {
-      //scheduleNotification("Georegion added", "Your geofence has been added!");
       pp('$mm Geofence has been added for EXIT:  ❤️ ❤️ ❤️');
     }).catchError((error) {
       pp("failed with $error");
       throw Exception('😈 👿 We are fucked, Boss! $error');
     });
 
-    Geofence.startListening(GeolocationEvent.entry, (entry) {
-      //scheduleNotification("Entry of a georegion", "Welcome to: ${entry.id}");
+    Geofence.startListening(GeolocationEvent.entry, (entry) async {
       pp('$mm Geofence has been fired for ENTRY:  🛎 🛎 🛎 🛎 lat: ${entry.latitude} lng: ${entry.longitude}');
-      LocalDB.addGeofenceLocationEvent(GeofenceLocationEvent(
-          eventId: DateTime.now().toIso8601String(),
-          date: DateTime.now().toIso8601String(),
-          geofenceLocation: geofenceLocation,
-          entered: true));
-      listener.onGeofenceEntry(geofenceLocation);
+      var loc = await LocalDB.getGeofenceLocationById(entry.id);
+      if (loc != null) {
+        LocalDB.addGeofenceLocationEvent(GeofenceLocationEvent(
+            eventId: DateTime.now().toIso8601String(),
+            date: DateTime.now().toIso8601String(),
+            geofenceLocation: loc,
+            entered: true));
+        pp('$mm Geofence ENTRY has been saved on disk:  🛎 🛎 🛎 🛎 ');
+        listener.onGeofenceEntry(geofenceLocation);
+      }
     });
 
-    Geofence.startListening(GeolocationEvent.exit, (exit) {
-      //scheduleNotification("Entry of a georegion", "Welcome to: ${entry.id}");
+    Geofence.startListening(GeolocationEvent.exit, (exit) async {
       pp('$mm Geofence has been fired for EXIT:  🛎 🛎 🛎 🛎  lat: ${exit.latitude} lng: ${exit.longitude}');
-      LocalDB.addGeofenceLocationEvent(GeofenceLocationEvent(
-          eventId: DateTime.now().toIso8601String(),
-          date: DateTime.now().toIso8601String(),
-          geofenceLocation: geofenceLocation,
-          entered: false));
-      listener.onGeofenceEntry(geofenceLocation);
+      var loc = await LocalDB.getGeofenceLocationById(exit.id);
+      if (loc != null) {
+        LocalDB.addGeofenceLocationEvent(GeofenceLocationEvent(
+            eventId: DateTime.now().toIso8601String(),
+            date: DateTime.now().toIso8601String(),
+            geofenceLocation: loc,
+            entered: false));
+        pp('$mm Geofence EXIT has been saved on disk:  🛎 🛎 🛎 🛎 ');
+        listener.onGeofenceEntry(geofenceLocation);
+      }
     });
 
     pp('✅ ✅ Geofence has been added for both enter and exit ✅ ✅ listeners set up 🔺🔺🔺');

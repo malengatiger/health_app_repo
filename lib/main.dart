@@ -43,7 +43,7 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
         primarySwatch: Colors.indigo,
-        textTheme: GoogleFonts.fredokaOneTextTheme(
+        textTheme: GoogleFonts.ralewayTextTheme(
           Theme.of(context).textTheme,
         ),
       ),

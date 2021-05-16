@@ -59,7 +59,7 @@ class LocalDB {
     await geoLocationBox!.deleteFromDisk();
     geoLocationBox = await Hive.openBox("geoLocationBox");
     p('$aa Hive geoLocationBox:  🔵  ....geoLocationBox.isOpen: ${geoLocationBox!.isOpen}');
-    p('$aa GeofenceLocation deleted from Disk: 🍎');
+    p('$aa GeofenceLocations deleted from Disk: 🍎');
   }
 
   static Future<List<GeofenceLocation>> getGeofenceLocations() async {
@@ -72,5 +72,40 @@ class LocalDB {
 
     p('$aa getGeofenceLocations found 🔵 ${locations.length}');
     return locations;
+  }
+
+  static Future<GeofenceLocation?>? getGeofenceLocationById(String id) async {
+    await initializeHive();
+    GeofenceLocation? location;
+    List values = geoLocationBox!.values.toList();
+    values.forEach((element) {
+      var loc = GeofenceLocation.fromJson(element);
+      if (loc.locationId == id) {
+        location = loc;
+      }
+    });
+
+    return location;
+  }
+
+  static Future<List<GeofenceLocationEvent>> getGeofenceEvents() async {
+    await initializeHive();
+    List<GeofenceLocationEvent> events = [];
+    List values = geoLocationEventBox!.values.toList();
+    values.forEach((element) {
+      events.add(GeofenceLocationEvent.fromJson(element));
+    });
+
+    p('$aa getGeofenceLocationEvents found 🔵 ${events.length}');
+    return events;
+  }
+
+  static Future deleteGeofenceLocationEvents() async {
+    await initializeHive();
+    await geoLocationEventBox!.deleteFromDisk();
+    geoLocationEventBox = await Hive.openBox("geoLocationEventBox");
+    p('$aa Hive geoLocationEventBox:  🔵  .... '
+        'geoLocationEventBox.isOpen: ${geoLocationEventBox!.isOpen}');
+    p('$aa GeofenceLocationEvents deleted from Disk: 🍎');
   }
 }

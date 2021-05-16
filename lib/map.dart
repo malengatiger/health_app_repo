@@ -110,6 +110,11 @@ class _GeofenceMapState extends State<GeofenceMap>
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        leading: IconButton(
+            icon: Icon(Icons.arrow_back_ios),
+            onPressed: () {
+              Navigator.pop(context, _geofenceLocations);
+            }),
         title: Text(
           'Geofence Map',
           style: Styles.whiteSmall,

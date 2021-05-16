@@ -8,6 +8,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter_geofence/geofence.dart';
 import 'package:geolocator/geolocator.dart';
+import 'package:health_app_repo/events_page.dart';
 import 'package:health_app_repo/geofence_location.dart';
 import 'package:health_app_repo/geofencer.dart';
 import 'package:health_app_repo/map.dart';
@@ -37,10 +38,8 @@ class _GeofencePageState extends State<GeofencePage>
     super.initState();
     initLog();
     logger.info('$mm ........... Geofence Builder has started ...');
-    _init();
-    _startFences();
-    _listen();
     _checkConnectivity();
+    _init();
   }
 
   late Stream<ActivityEvent> activityStream;
@@ -50,6 +49,7 @@ class _GeofencePageState extends State<GeofencePage>
   StreamSubscription<ConnectivityResult>? _subscription;
   Position? _position;
   bool busy = false;
+  List<GeofenceLocationEvent> _geofenceEvents = [];
 
   void _init() async {
     /// Android requires explicitly asking permission
@@ -89,6 +89,11 @@ class _GeofencePageState extends State<GeofencePage>
   bool connected = false;
   void _checkConnectivity() async {
     connected = await checkNetworkConnectivity();
+    if (connected) {
+      _listen();
+      await _startFences();
+      await _getEvents();
+    }
     setState(() {});
   }
 
@@ -113,7 +118,12 @@ class _GeofencePageState extends State<GeofencePage>
     });
   }
 
-  void _startFences() async {
+  Future _getEvents() async {
+    pp('$mm getting events from disk ...');
+    _geofenceEvents = await LocalDB.getGeofenceEvents();
+  }
+
+  Future _startFences() async {
     pp('$mm ..... buildGeofence will be called  ....');
     setState(() {
       busy = true;
@@ -128,7 +138,7 @@ class _GeofencePageState extends State<GeofencePage>
     });
   }
 
-  void _navigateToMap() async {
+  void _navigateToEvents() async {
     pp('$mm ..... _navigateToMap  ....');
     await Navigator.push(
         context,
@@ -136,7 +146,22 @@ class _GeofencePageState extends State<GeofencePage>
             type: PageTransitionType.scale,
             alignment: Alignment.topLeft,
             duration: Duration(milliseconds: 1000),
+            child: EventsPage(
+              events: _geofenceEvents,
+            )));
+  }
+
+  void _navigateToMap() async {
+    pp('$mm ..... _navigateToMap  ....');
+    _geofenceLocations = await Navigator.push(
+        context,
+        PageTransition(
+            type: PageTransitionType.scale,
+            alignment: Alignment.topLeft,
+            duration: Duration(milliseconds: 1000),
             child: GeofenceMap()));
+
+    setState(() {});
   }
 
   @override
@@ -151,15 +176,26 @@ class _GeofencePageState extends State<GeofencePage>
               fontWeight: FontWeight.w300, color: Colors.black, fontSize: 14),
         ),
         actions: [
-          IconButton(
-              icon: Icon(
-                Icons.refresh,
-                size: 16,
-                color: Colors.grey,
-              ),
-              onPressed: () {
-                _startFences();
-              }),
+          _geofenceEvents.isEmpty
+              ? IconButton(
+                  icon: Icon(
+                    Icons.refresh,
+                    size: 24,
+                    color: Colors.indigo,
+                  ),
+                  onPressed: () {
+                    _startFences();
+                    _getEvents();
+                  })
+              : IconButton(
+                  icon: Icon(
+                    Icons.event,
+                    size: 20,
+                    color: Colors.black,
+                  ),
+                  onPressed: () {
+                    _navigateToEvents();
+                  }),
           IconButton(
               icon: Icon(
                 Icons.map,
