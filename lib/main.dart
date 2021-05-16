@@ -47,6 +47,7 @@ class MyApp extends StatelessWidget {
           Theme.of(context).textTheme,
         ),
       ),
+      // home: HealthPage(),
       home: GeofencePage(),
       // home: GeofenceMap(),
     );

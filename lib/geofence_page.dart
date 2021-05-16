@@ -11,6 +11,7 @@ import 'package:geolocator/geolocator.dart';
 import 'package:health_app_repo/events_page.dart';
 import 'package:health_app_repo/geofence_location.dart';
 import 'package:health_app_repo/geofencer.dart';
+import 'package:health_app_repo/health_page.dart';
 import 'package:health_app_repo/map.dart';
 import 'package:health_app_repo/util/functions.dart';
 import 'package:health_app_repo/util/util.dart';
@@ -164,6 +165,19 @@ class _GeofencePageState extends State<GeofencePage>
     setState(() {});
   }
 
+  void _navigateToHealthData() async {
+    pp('$mm ..... _navigateToMap  ....');
+    Navigator.push(
+        context,
+        PageTransition(
+            type: PageTransitionType.scale,
+            alignment: Alignment.topLeft,
+            duration: Duration(milliseconds: 1000),
+            child: HealthPage()));
+
+    setState(() {});
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -204,6 +218,15 @@ class _GeofencePageState extends State<GeofencePage>
               ),
               onPressed: () {
                 _navigateToMap();
+              }),
+          IconButton(
+              icon: Icon(
+                Icons.directions_walk,
+                size: 20,
+                color: Colors.black,
+              ),
+              onPressed: () {
+                _navigateToHealthData();
               })
         ],
       ),
