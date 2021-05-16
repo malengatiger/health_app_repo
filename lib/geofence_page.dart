@@ -1,7 +1,5 @@
 import 'dart:async';
-import 'dart:io';
 
-import 'package:activity_recognition_flutter/activity_recognition_flutter.dart';
 import 'package:connectivity/connectivity.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -15,7 +13,6 @@ import 'package:health_app_repo/map.dart';
 import 'package:health_app_repo/util/functions.dart';
 import 'package:health_app_repo/util/util.dart';
 import 'package:page_transition/page_transition.dart';
-import 'package:permission_handler/permission_handler.dart';
 
 import 'functions_and_shit.dart';
 import 'hive_db.dart';
@@ -38,46 +35,16 @@ class _GeofencePageState extends State<GeofencePage>
     initLog();
     logger.info('$mm ........... Geofence Builder has started ...');
     _checkConnectivity();
-    _init();
   }
 
-  late Stream<ActivityEvent> activityStream;
-  ActivityEvent latestActivity = ActivityEvent.empty();
-  List<ActivityEvent> _events = [];
-  ActivityRecognition activityRecognition = ActivityRecognition.instance;
+  // late Stream<ActivityEvent> activityStream;
+  // ActivityEvent latestActivity = ActivityEvent.empty();
+  // List<ActivityEvent> _events = [];
+  // ActivityRecognition activityRecognition = ActivityRecognition.instance;
   StreamSubscription<ConnectivityResult>? _subscription;
   Position? _position;
   bool busy = false;
   List<GeofenceLocationEvent> _geofenceEvents = [];
-
-  void _init() async {
-    /// Android requires explicitly asking permission
-    if (Platform.isAndroid) {
-      if (await Permission.activityRecognition.request().isGranted) {
-        _startTracking();
-      }
-    } else {
-      _startTracking();
-    }
-  }
-
-  void _startTracking() {
-    pp("$mm start activity tracking ..................");
-    activityStream =
-        activityRecognition.startStream(runForegroundService: true);
-    activityStream.listen(onData);
-  }
-
-  void onData(ActivityEvent activityEvent) {
-    pp("$mm onData: ActivityEvent fired: .................. "
-        "🍎  ${activityEvent.toString()} - "
-        "🍎  ${getFormattedDateShortWithTime(DateTime.now().toIso8601String(), context)}");
-
-    setState(() {
-      _events.add(activityEvent);
-      latestActivity = activityEvent;
-    });
-  }
 
   @override
   void dispose() {
@@ -492,53 +459,66 @@ class _GeofencePageState extends State<GeofencePage>
                         SizedBox(
                           height: 24,
                         ),
-                        Card(
-                          elevation: 4,
-                          child: Padding(
-                            padding: const EdgeInsets.all(32.0),
-                            child: Column(
-                              children: [
-                                SizedBox(
-                                  height: 8,
+                        StreamBuilder<Activity>(
+                            stream: serviceLeGeofence.activityStream,
+                            builder: (context, snapshot) {
+                              Activity? act;
+                              if (snapshot.hasData) {
+                                act = snapshot.data;
+                              }
+                              if (act != null) {
+                                return Card(
+                                  child: Padding(
+                                    padding: const EdgeInsets.all(32.0),
+                                    child: Column(
+                                      children: [
+                                        SizedBox(
+                                          height: 8,
+                                        ),
+                                        Text(
+                                          'Activity Recognition',
+                                          style: Styles.tealBoldMedium,
+                                        ),
+                                        SizedBox(
+                                          height: 20,
+                                        ),
+                                        Column(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.center,
+                                          children: [
+                                            Text('${act.type}'),
+                                            SizedBox(
+                                              height: 8,
+                                            ),
+                                            Text(
+                                              '${act.confidence.toString()}',
+                                              style: Styles.pinkBoldSmall,
+                                            ),
+                                            SizedBox(
+                                              height: 28,
+                                            ),
+                                            Text(
+                                              '${getFormattedDateLongWithTime(DateTime.now().toIso8601String(), context)}',
+                                              style: Styles.greyLabelTiny,
+                                            ),
+                                          ],
+                                        )
+                                      ],
+                                    ),
+                                  ),
+                                );
+                              }
+                              return Card(
+                                elevation: 4,
+                                child: Padding(
+                                  padding: const EdgeInsets.all(32.0),
+                                  child: Text(
+                                    'No Activity Seen Yet',
+                                    style: Styles.greyLabelMedium,
+                                  ),
                                 ),
-                                Text(
-                                  'Activity Recognition',
-                                  style: Styles.tealBoldMedium,
-                                ),
-                                SizedBox(
-                                  height: 20,
-                                ),
-                                Column(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: [
-                                    Text('${latestActivity.type}'),
-                                    SizedBox(
-                                      height: 8,
-                                    ),
-                                    Text(
-                                      'Confidence',
-                                      style: Styles.greyLabelSmall,
-                                    ),
-                                    SizedBox(
-                                      height: 8,
-                                    ),
-                                    Text(
-                                      '${latestActivity.confidence}',
-                                      style: Styles.pinkBoldMedium,
-                                    ),
-                                    SizedBox(
-                                      height: 8,
-                                    ),
-                                    Text(
-                                      '${getFormattedDateLongWithTime(DateTime.now().toIso8601String(), context)}',
-                                      style: Styles.greyLabelTiny,
-                                    ),
-                                  ],
-                                )
-                              ],
-                            ),
-                          ),
-                        ),
+                              );
+                            }),
                       ],
                     ),
                   ),
@@ -564,5 +544,61 @@ class _GeofencePageState extends State<GeofencePage>
     setState(() {
       exitedLocation = geolocation;
     });
+  }
+}
+
+class ActivityCard extends StatelessWidget {
+  final Activity activity;
+
+  const ActivityCard({Key? key, required this.activity}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Card(
+        elevation: 4,
+        child: Padding(
+          padding: const EdgeInsets.all(32.0),
+          child: Column(
+            children: [
+              SizedBox(
+                height: 8,
+              ),
+              Text(
+                'Activity Recognition',
+                style: Styles.tealBoldMedium,
+              ),
+              SizedBox(
+                height: 20,
+              ),
+              Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Text('${activity.type}'),
+                  SizedBox(
+                    height: 8,
+                  ),
+                  Text(
+                    'Confidence',
+                    style: Styles.greyLabelSmall,
+                  ),
+                  SizedBox(
+                    height: 8,
+                  ),
+                  Text(
+                    '${activity.confidence}',
+                    style: Styles.pinkBoldMedium,
+                  ),
+                  SizedBox(
+                    height: 8,
+                  ),
+                  Text(
+                    '${getFormattedDateLongWithTime(DateTime.now().toIso8601String(), context)}',
+                    style: Styles.greyLabelTiny,
+                  ),
+                ],
+              )
+            ],
+          ),
+        ));
   }
 }

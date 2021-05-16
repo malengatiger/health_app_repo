@@ -14,7 +14,6 @@ dependencies:
 
   cupertino_icons: ^1.0.3
   geofence_service: ^3.0.3
-  activity_recognition_flutter: ^4.0.0
   geolocator: ^7.0.3
   flutter_local_notifications: ^5.0.0+4
   ansicolor: ^2.0.1

@@ -52,6 +52,7 @@ class ServiceLeGeofence {
 
   StreamController<Activity> _activityStreamController =
       StreamController<Activity>.broadcast();
+
   Stream<Activity> get activityStream => _activityStreamController.stream;
 
   close() {
@@ -104,8 +105,8 @@ class ServiceLeGeofence {
   }
 
   void _onActivityChanged(Activity prevActivity, Activity currActivity) {
-    pp('$mm _onActivityChanged: 🌀 prevActivity: ${prevActivity.toMap()}');
-    pp('$mm _onActivityChanged: 🌀 currActivity: ${currActivity.toMap()}\n');
+    pp('\n\n$mm _onActivityChanged: 🌀 🌀 🌀 previous Activity: ${prevActivity.toMap()}');
+    pp('$mm _onActivityChanged: 🌀 🌀 🌀 current Activity: ${currActivity.toMap()}\n');
 
     _activityStreamController.sink.add(currActivity);
   }
@@ -132,6 +133,7 @@ class ServiceLeGeofence {
           id: element.name!,
           latitude: element.latitude!,
           longitude: element.longitude!,
+          data: element.toJson(),
           radius: [
             GeofenceRadius(id: 'radius_100m', length: 100),
             // GeofenceRadius(id: 'radius_25m', length: 25),
