@@ -27,3 +27,32 @@ class GeofenceLocation {
         'longitude': longitude,
       };
 }
+
+class GeofenceLocationEvent {
+  String? eventId;
+  String? date;
+  GeofenceLocation? geofenceLocation;
+  bool? entered;
+
+  GeofenceLocationEvent(
+      {this.eventId, this.geofenceLocation, this.date, this.entered});
+
+  GeofenceLocationEvent.fromJson(Map data) {
+    this.eventId = data['eventId'];
+    this.date = data['date'];
+    this.entered = data['entered'];
+
+    if (data['geofenceLocation'] != null) {
+      this.geofenceLocation =
+          GeofenceLocation.fromJson(data['geofenceLocation']);
+    }
+  }
+
+  Map<String, dynamic> toJson() => <String, dynamic>{
+        'eventId': eventId,
+        'date': date,
+        'entered': entered,
+        'geofenceLocation':
+            geofenceLocation == null ? null : geofenceLocation!.toJson()
+      };
+}

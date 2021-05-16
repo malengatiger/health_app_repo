@@ -1,5 +1,6 @@
 import 'package:flutter_geofence/geofence.dart';
 import 'package:geolocator/geolocator.dart';
+import 'package:health_app_repo/hive_db.dart';
 
 import 'functions_and_shit.dart';
 import 'geofence_location.dart';
@@ -61,12 +62,22 @@ class Geofencer {
     Geofence.startListening(GeolocationEvent.entry, (entry) {
       //scheduleNotification("Entry of a georegion", "Welcome to: ${entry.id}");
       pp('$mm Geofence has been fired for ENTRY:  🛎 🛎 🛎 🛎 lat: ${entry.latitude} lng: ${entry.longitude}');
+      LocalDB.addGeofenceLocationEvent(GeofenceLocationEvent(
+          eventId: DateTime.now().toIso8601String(),
+          date: DateTime.now().toIso8601String(),
+          geofenceLocation: geofenceLocation,
+          entered: true));
       listener.onGeofenceEntry(geofenceLocation);
     });
 
     Geofence.startListening(GeolocationEvent.exit, (exit) {
       //scheduleNotification("Entry of a georegion", "Welcome to: ${entry.id}");
       pp('$mm Geofence has been fired for EXIT:  🛎 🛎 🛎 🛎  lat: ${exit.latitude} lng: ${exit.longitude}');
+      LocalDB.addGeofenceLocationEvent(GeofenceLocationEvent(
+          eventId: DateTime.now().toIso8601String(),
+          date: DateTime.now().toIso8601String(),
+          geofenceLocation: geofenceLocation,
+          entered: false));
       listener.onGeofenceEntry(geofenceLocation);
     });
 

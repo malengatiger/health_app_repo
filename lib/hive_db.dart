@@ -10,6 +10,7 @@ class LocalDB {
 
   static String databaseName = 'anchor001a';
   static Box? geoLocationBox;
+  static Box? geoLocationEventBox;
 
   static const aa = '🔵 🔵 🔵 🔵 🔵 LocalDB(Hive): ';
 
@@ -24,6 +25,7 @@ class LocalDB {
           ' 🍎 🍎 ${appDocumentDirectory.path}');
 
       geoLocationBox = await Hive.openBox("geoLocationBox");
+      geoLocationEventBox = await Hive.openBox("geoLocationEventBox");
       p('$aa Hive geoLocationBox:  🔵  ....geoLocationBox.isOpen: ${geoLocationBox!.isOpen}');
       p('$aa Hive local data ready to rumble ....$aa');
       return '$aa Hive Initialized OK';
@@ -41,6 +43,15 @@ class LocalDB {
     await geoLocationBox!.put(location.locationId, location.toJson());
     p('$aa GeofenceLocation added or changed: 🍎 '
         'record: ${location.toJson()}');
+  }
+
+  static Future addGeofenceLocationEvent(
+      GeofenceLocationEvent locationEvent) async {
+    await initializeHive();
+    await geoLocationEventBox!
+        .put(locationEvent.eventId, locationEvent.toJson());
+    p('$aa GeofenceLocationEvent added or changed: 🍎 '
+        'record: ${locationEvent.toJson()}');
   }
 
   static Future deleteGeofenceLocations() async {

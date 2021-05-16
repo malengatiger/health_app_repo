@@ -51,7 +51,7 @@ class _GeofenceMapState extends State<GeofenceMap>
   Set<Circle> _circles = HashSet();
 
   void _getGeofenceLocations() async {
-    pp('$mm _getGeofenceLocations ... ');
+    pp('$mm _getGeofenceLocations ... .....................');
     _geofenceLocations = await LocalDB.getGeofenceLocations();
     _addMarkers();
   }
