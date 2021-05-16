@@ -7,30 +7,22 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="960a3068-0221-4322-9fd2-c05f69aa497e" name="Default Changelist" comment="refactored ui 🍊">
-      <change afterPath="$PROJECT_DIR$/android/app/src/main/res/drawable-v21/ic_launcher.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/android/app/src/main/res/drawable/ic_launcher.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/lib/dio_client.dart" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/lib/functions_and_shit.dart" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/lib/net.dart" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/lib/util/functions.dart" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/lib/util/image_handler/currency_icons.dart" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/lib/util/image_handler/random_image.dart" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/lib/util/prefs.dart" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/lib/util/snack.dart" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/lib/util/theme.dart" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/lib/util/util.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.flutter-plugins" beforeDir="false" afterPath="$PROJECT_DIR$/.flutter-plugins" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/lib/geofence_location.dart" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/lib/hive_db.dart" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/lib/map.dart" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.flutter-plugins-dependencies" beforeDir="false" afterPath="$PROJECT_DIR$/.flutter-plugins-dependencies" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/libraries/Dart_Packages.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/libraries/Dart_Packages.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/libraries/Flutter_Plugins.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/libraries/Flutter_Plugins.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/android/app/build.gradle" beforeDir="false" afterPath="$PROJECT_DIR$/android/app/build.gradle" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/android/app/src/main/AndroidManifest.xml" beforeDir="false" afterPath="$PROJECT_DIR$/android/app/src/main/AndroidManifest.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/health_app_repo.iml" beforeDir="false" afterPath="$PROJECT_DIR$/health_app_repo.iml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/ios/Podfile.lock" beforeDir="false" afterPath="$PROJECT_DIR$/ios/Podfile.lock" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ios/Runner.xcodeproj/project.pbxproj" beforeDir="false" afterPath="$PROJECT_DIR$/ios/Runner.xcodeproj/project.pbxproj" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ios/Runner/AppDelegate.swift" beforeDir="false" afterPath="$PROJECT_DIR$/ios/Runner/AppDelegate.swift" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/ios/Runner/Info.plist" beforeDir="false" afterPath="$PROJECT_DIR$/ios/Runner/Info.plist" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/lib/geofence_page.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/geofence_page.dart" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/lib/geofencer.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/geofencer.dart" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/lib/main.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/main.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/util/functions.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/util/functions.dart" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/pubspec.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/pubspec.yaml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -49,6 +41,14 @@
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
+  <component name="GitSEFilterConfiguration">
+    <file-type-list>
+      <filtered-out-file-type name="LOCAL_BRANCH" />
+      <filtered-out-file-type name="REMOTE_BRANCH" />
+      <filtered-out-file-type name="TAG" />
+      <filtered-out-file-type name="COMMIT_BY_MESSAGE" />
+    </file-type-list>
+  </component>
   <component name="ProjectId" id="1sUiBIAKaY4neFrTxTWMNV47cBI" />
   <component name="ProjectLevelVcsManager">
     <ConfirmationsSetting value="2" id="Add" />
@@ -58,10 +58,14 @@
     <option name="showLibraryContents" value="true" />
   </component>
   <component name="PropertiesComponent">
+    <property name="ACTIVE_CLOUD_PROJECT_ACCOUNT" value="malengatiger@gmail.com" />
+    <property name="ACTIVE_CLOUD_PROJECT_ID" value="money-platform-2021" />
+    <property name="ACTIVE_CLOUD_PROJECT_NAME" value="money-platform-2021" />
+    <property name="ACTIVE_CLOUD_PROJECT_NUMBER" value="189690056754" />
     <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
     <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
     <property name="SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
-    <property name="com.google.cloudcode.ide_session_index" value="20210515_0012" />
+    <property name="com.google.cloudcode.ide_session_index" value="20210516_0006" />
     <property name="dart.analysis.tool.window.visible" value="false" />
     <property name="io.flutter.reload.alreadyRun" value="true" />
     <property name="last_opened_file_path" value="$PROJECT_DIR$/lib" />
@@ -131,6 +135,7 @@
         </entry>
       </map>
     </option>
+    <option name="oldMeFiltersMigrated" value="true" />
   </component>
   <component name="VcsManagerConfiguration">
     <MESSAGE value="initial commit" />

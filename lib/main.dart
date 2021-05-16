@@ -48,6 +48,7 @@ class MyApp extends StatelessWidget {
         ),
       ),
       home: GeofencePage(),
+      // home: GeofenceMap(),
     );
   }
 }

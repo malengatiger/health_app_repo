@@ -688,13 +688,14 @@ String getFormattedDateHourMinSec(String date) {
   }
 }
 
-String? getFormattedDateHourMinuteSecond() {
+String getFormattedDateHourMinuteSecond() {
   var format = new DateFormat.Hms();
   try {
     DateTime d = DateTime.now();
     return format.format(d.toLocal());
-  } catch (e) {}
-  return null;
+  } catch (e) {
+    return DateTime.now().toIso8601String();
+  }
 }
 
 String getFormattedNumber(int number, BuildContext context) {

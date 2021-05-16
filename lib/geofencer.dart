@@ -2,12 +2,13 @@ import 'package:flutter_geofence/geofence.dart';
 import 'package:geolocator/geolocator.dart';
 
 import 'functions_and_shit.dart';
+import 'geofence_location.dart';
 
 final Geofencer geofencer = Geofencer.instance;
 
 abstract class GeofencerListener {
-  onGeofenceEntry(Geolocation geolocation);
-  onGeofenceExit(Geolocation geolocation);
+  onGeofenceEntry(GeofenceLocation geolocation);
+  onGeofenceExit(GeofenceLocation geolocation);
   onBackgroundLocation(Coordinate coordinate);
 }
 
@@ -21,15 +22,24 @@ class Geofencer {
 
   static final Geofencer instance = Geofencer._privateConstructor();
 
-  Future<Position> buildGeofence(GeofencerListener listener) async {
+  Future buildGeofences(
+      {required List<GeofenceLocation> locations,
+      required GeofencerListener listener}) async {
+    for (var loc in locations) {
+      await buildGeofence(geofenceLocation: loc, listener: listener);
+    }
+  }
+
+  Future buildGeofence(
+      {required GeofenceLocation geofenceLocation,
+      required GeofencerListener listener}) async {
     pp('$mm will be building geofences: requesting permission ...');
     Geofence.requestPermissions();
-    var pos = await getCurrentPosition();
     var location = Geolocation(
-        latitude: pos.latitude,
-        longitude: pos.longitude,
+        latitude: geofenceLocation.latitude!,
+        longitude: geofenceLocation.longitude!,
         radius: 200,
-        id: 'myLocation');
+        id: '${geofenceLocation.locationId}');
 
     await Geofence.addGeolocation(location, GeolocationEvent.entry)
         .then((onValue) {
@@ -51,17 +61,17 @@ class Geofencer {
     Geofence.startListening(GeolocationEvent.entry, (entry) {
       //scheduleNotification("Entry of a georegion", "Welcome to: ${entry.id}");
       pp('$mm Geofence has been fired for ENTRY:  🛎 🛎 🛎 🛎 lat: ${entry.latitude} lng: ${entry.longitude}');
-      listener.onGeofenceEntry(entry);
+      listener.onGeofenceEntry(geofenceLocation);
     });
 
     Geofence.startListening(GeolocationEvent.exit, (exit) {
       //scheduleNotification("Entry of a georegion", "Welcome to: ${entry.id}");
       pp('$mm Geofence has been fired for EXIT:  🛎 🛎 🛎 🛎  lat: ${exit.latitude} lng: ${exit.longitude}');
-      listener.onGeofenceEntry(exit);
+      listener.onGeofenceEntry(geofenceLocation);
     });
 
     pp('✅ ✅ Geofence has been added for both enter and exit ✅ ✅ listeners set up 🔺🔺🔺');
-    return pos;
+    return null;
   }
 
   void listenToBackgroundLocation(GeofencerListener listener) {
