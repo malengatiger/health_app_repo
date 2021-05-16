@@ -38,8 +38,10 @@ class _GeofenceMapState extends State<GeofenceMap>
     pp('$mm .......... get current location ....');
     _currentPosition = await _geofencer.getCurrentPosition();
     if (_currentPosition == null) {
+      pp('$mm  👿 👿 👿 👿.......... _currentPosition is null ....');
       return;
     }
+    pp('$mm .......... get current location .... found: ${_currentPosition!.toJson()}');
     _myCurrentCameraPosition = CameraPosition(
       target: LatLng(_currentPosition!.latitude, _currentPosition!.longitude),
       zoom: 14.4746,

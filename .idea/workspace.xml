@@ -6,14 +6,9 @@
     </shared>
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="960a3068-0221-4322-9fd2-c05f69aa497e" name="Default Changelist" comment="added google map for geofence creation 🍎">
+    <list default="true" id="960a3068-0221-4322-9fd2-c05f69aa497e" name="Default Changelist" comment="saving geofence events on disk">
       <change beforePath="$PROJECT_DIR$/.flutter-plugins-dependencies" beforeDir="false" afterPath="$PROJECT_DIR$/.flutter-plugins-dependencies" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/geofence_location.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/geofence_location.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/geofencer.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/geofencer.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/hive_db.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/hive_db.dart" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/lib/map.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/map.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/pubspec.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/pubspec.yaml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -119,7 +114,14 @@
       <option name="project" value="LOCAL" />
       <updated>1621135372920</updated>
     </task>
-    <option name="localTasksCounter" value="6" />
+    <task id="LOCAL-00006" summary="saving geofence events on disk">
+      <created>1621139122691</created>
+      <option name="number" value="00006" />
+      <option name="presentableId" value="LOCAL-00006" />
+      <option name="project" value="LOCAL" />
+      <updated>1621139122691</updated>
+    </task>
+    <option name="localTasksCounter" value="7" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -139,6 +141,7 @@
     <MESSAGE value="added geofencing and notifications " />
     <MESSAGE value="refactored ui " />
     <MESSAGE value="added google map for geofence creation " />
-    <option name="LAST_COMMIT_MESSAGE" value="added google map for geofence creation " />
+    <MESSAGE value="saving geofence events on disk" />
+    <option name="LAST_COMMIT_MESSAGE" value="saving geofence events on disk" />
   </component>
 </project>
