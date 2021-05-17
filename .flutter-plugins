@@ -7,6 +7,7 @@ flutter_activity_recognition=/Users/aubs/.pub-cache/hosted/pub.dartlang.org/flut
 flutter_foreground_task=/Users/aubs/.pub-cache/hosted/pub.dartlang.org/flutter_foreground_task-1.0.7/
 flutter_local_notifications=/Users/aubs/.pub-cache/hosted/pub.dartlang.org/flutter_local_notifications-5.0.0+4/
 flutter_plugin_android_lifecycle=/Users/aubs/.pub-cache/hosted/pub.dartlang.org/flutter_plugin_android_lifecycle-2.0.1/
+geocoding=/Users/aubs/.pub-cache/hosted/pub.dartlang.org/geocoding-2.0.0/
 geofence_service=/Users/aubs/.pub-cache/hosted/pub.dartlang.org/geofence_service-3.0.3/
 geolocator=/Users/aubs/.pub-cache/hosted/pub.dartlang.org/geolocator-7.0.3/
 geolocator_web=/Users/aubs/.pub-cache/hosted/pub.dartlang.org/geolocator_web-2.0.3/

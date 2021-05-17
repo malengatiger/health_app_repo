@@ -59,20 +59,26 @@ class EventsPage extends StatelessWidget {
                                 size: 16,
                                 color: Colors.teal,
                               )
-                            : Icon(
-                                Icons.arrow_back_ios,
-                                size: 16,
-                                color: Colors.pink,
-                              ),
+                            : event.dwelled!
+                                ? Icon(Icons.directions_walk,
+                                    size: 20, color: Colors.blue)
+                                : Icon(
+                                    Icons.arrow_back_ios,
+                                    size: 16,
+                                    color: Colors.pink,
+                                  ),
                         title: Text(event.geofenceLocation!.name!),
                         subtitle: Row(
                           children: [
                             event.entered!
                                 ? Text('Entered', style: Styles.tealBoldSmall)
-                                : Text(
-                                    'Exited',
-                                    style: Styles.pinkBoldSmall,
-                                  ),
+                                : event.dwelled!
+                                    ? Text('Dwelled',
+                                        style: Styles.blueBoldSmall)
+                                    : Text(
+                                        'Exited',
+                                        style: Styles.pinkBoldSmall,
+                                      ),
                             SizedBox(
                               width: 12,
                             ),

@@ -128,7 +128,8 @@ class ServiceLeGeofence {
   Future buildGeofences({required List<GeofenceLocation> locations}) async {
     pp('$mm buildGeofences: requesting permission to build 🛎 ${locations.length} geofences ...');
     this.locations = locations;
-    locations.forEach((element) {
+
+    locations.forEach((element) async {
       var fence = Geofence(
           id: element.name!,
           latitude: element.latitude!,
@@ -150,6 +151,7 @@ class ServiceLeGeofence {
         (geofence, geofenceRadius, geofenceStatus, position) =>
             _onGeofenceStatusChanged(
                 geofence, geofenceRadius, geofenceStatus, position));
+
     pp('$mm buildGeofences:  ✅  ✅  ✅  🌺 ${geofences.length} geofences  '
         '🌺 added to service 🛎 ');
 

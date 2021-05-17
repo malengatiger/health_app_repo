@@ -9,6 +9,8 @@ import 'package:health_app_repo/geofence_location.dart';
 import 'package:health_app_repo/hive_db.dart';
 import 'package:health_app_repo/util/functions.dart';
 
+import 'geocoding_service.dart';
+
 class GeofenceMap extends StatefulWidget {
   @override
   _GeofenceMapState createState() => _GeofenceMapState();
@@ -143,12 +145,17 @@ class _GeofenceMapState extends State<GeofenceMap>
 
   void _onLongPress(LatLng latLng) async {
     pp('$mm onLongPress latLng: 🍎 lat: ${latLng.latitude} lng: ${latLng.longitude}');
+    var placeMark = await GeocodingService.getPlacemark(
+        latitude: latLng.latitude, longitude: latLng.longitude);
     var loc = GeofenceLocation(
         locationId: DateTime.now().toIso8601String(),
-        name: 'Geofence 🍎 #${_geofenceLocations.length + 1}',
+        name: placeMark == null
+            ? 'Geofence  🍎 ${_geofenceLocations.length + 1}'
+            : '${placeMark.street} 🍎 ${placeMark.locality}',
         latitude: latLng.latitude,
         longitude: latLng.longitude);
 
+    pp('$mm onLongPress: adding geofenceLocation: ✅  ✅  ✅ ${loc.toJson()} ');
     _geofenceLocations.add(loc);
     _addMarker(loc);
     await LocalDB.addGeofenceLocation(loc);
