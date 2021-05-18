@@ -6,12 +6,11 @@
     </shared>
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="960a3068-0221-4322-9fd2-c05f69aa497e" name="Default Changelist" comment="reorganized dart files into new packages 🍎">
-      <change afterPath="$PROJECT_DIR$/lib/ui/activity_map.dart" afterDir="false" />
+    <list default="true" id="960a3068-0221-4322-9fd2-c05f69aa497e" name="Default Changelist" comment="cleaned up localDB and added activity map 💜">
+      <change afterPath="$PROJECT_DIR$/assets/markers/footprint.png" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.flutter-plugins-dependencies" beforeDir="false" afterPath="$PROJECT_DIR$/.flutter-plugins-dependencies" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/services/hive_db.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/services/hive_db.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/ui/geofence_page.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/ui/geofence_page.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/ui/activity_map.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/ui/activity_map.dart" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/pubspec.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/pubspec.yaml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -55,21 +54,23 @@
     <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
     <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
     <property name="SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
-    <property name="com.google.cloudcode.ide_session_index" value="20210518_0016" />
+    <property name="com.google.cloudcode.ide_session_index" value="20210518_0017" />
     <property name="dart.analysis.tool.window.visible" value="false" />
     <property name="io.flutter.reload.alreadyRun" value="true" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$/lib/ui" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/assets" />
     <property name="settings.editor.selected.configurable" value="preferences.lookFeel" />
     <property name="show.migrate.to.gradle.popup" value="false" />
   </component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/assets" />
       <recent name="$PROJECT_DIR$/lib/ui" />
       <recent name="$PROJECT_DIR$/lib" />
       <recent name="$PROJECT_DIR$/android/app/src/main/res/drawable-v21" />
       <recent name="$PROJECT_DIR$/android/app/src/main/res/drawable" />
     </key>
     <key name="MoveFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/assets/markers" />
       <recent name="$PROJECT_DIR$/lib/ui" />
       <recent name="$PROJECT_DIR$/lib/util" />
       <recent name="$PROJECT_DIR$/lib/data_models" />
@@ -189,7 +190,14 @@
       <option name="project" value="LOCAL" />
       <updated>1621344039489</updated>
     </task>
-    <option name="localTasksCounter" value="15" />
+    <task id="LOCAL-00015" summary="cleaned up localDB and added activity map 💜">
+      <created>1621348780715</created>
+      <option name="number" value="00015" />
+      <option name="presentableId" value="LOCAL-00015" />
+      <option name="project" value="LOCAL" />
+      <updated>1621348780715</updated>
+    </task>
+    <option name="localTasksCounter" value="16" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -218,6 +226,7 @@
     <MESSAGE value="added geocoding to resolve location info  ✅" />
     <MESSAGE value="merged activity data with location coors " />
     <MESSAGE value="reorganized dart files into new packages " />
-    <option name="LAST_COMMIT_MESSAGE" value="reorganized dart files into new packages " />
+    <MESSAGE value="cleaned up localDB and added activity map " />
+    <option name="LAST_COMMIT_MESSAGE" value="cleaned up localDB and added activity map " />
   </component>
 </project>

@@ -1,7 +1,10 @@
 import 'dart:async';
 import 'dart:collection';
+import 'dart:typed_data';
+import 'dart:ui' as ui;
 
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:health_app_repo/data_models/geofence_location.dart';
@@ -30,8 +33,27 @@ class _ActivityMapState extends State<ActivityMap>
   void initState() {
     _controller = AnimationController(vsync: this);
     super.initState();
+    _init();
+  }
+
+  static Future<Uint8List> getBytesFromAsset(String path, int width) async {
+    ByteData data = await rootBundle.load(path);
+    ui.Codec codec = await ui.instantiateImageCodec(data.buffer.asUint8List(),
+        targetWidth: width);
+    ui.FrameInfo fi = await codec.getNextFrame();
+    return (await fi.image.toByteData(format: ui.ImageByteFormat.png))!
+        .buffer
+        .asUint8List();
+  }
+
+  late BitmapDescriptor customMarker;
+  void _init() async {
+    var uintList = await getBytesFromAsset("assets/markers/footprint.png", 80);
+    customMarker = BitmapDescriptor.fromBytes(uintList);
+    pp('$mm custom marker 💜 assets/markers/footprint.png created');
     _getCurrentLocation();
     _getActivityEvents();
+    setState(() {});
   }
 
   Position? _currentPosition;
@@ -99,7 +121,7 @@ class _ActivityMapState extends State<ActivityMap>
       ),
       body: GoogleMap(
         mapType: MapType.hybrid,
-        myLocationEnabled: true,
+        myLocationEnabled: false,
         markers: _markers,
         circles: _circles,
         initialCameraPosition: _myCurrentCameraPosition,
@@ -123,8 +145,7 @@ class _ActivityMapState extends State<ActivityMap>
         final MarkerId markerId = MarkerId('${event.eventId}');
         final Marker marker = Marker(
           markerId: markerId,
-          icon:
-              BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueAzure),
+          icon: customMarker,
           position: LatLng(
             event.latitude!,
             event.longitude!,
