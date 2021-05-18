@@ -3,8 +3,8 @@ import 'dart:async';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:health/health.dart';
-import 'package:health_app_repo/functions_and_shit.dart';
 import 'package:health_app_repo/util/functions.dart';
+import 'package:health_app_repo/util/functions_and_shit.dart';
 
 class HealthPage extends StatefulWidget {
   @override

@@ -2,8 +2,8 @@ import 'dart:async';
 
 import 'package:geofence_service/geofence_service.dart';
 
-import '../functions_and_shit.dart';
-import '../geofence_location.dart';
+import '../data_models/geofence_location.dart';
+import '../util/functions_and_shit.dart';
 import 'hive_db.dart';
 
 final ServiceLeGeofence serviceLeGeofence = ServiceLeGeofence.instance;

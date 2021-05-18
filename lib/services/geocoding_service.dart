@@ -1,5 +1,5 @@
 import 'package:geocoding/geocoding.dart';
-import 'package:health_app_repo/functions_and_shit.dart';
+import 'package:health_app_repo/util/functions_and_shit.dart';
 
 class GeocodingService {
   static const mm = 'Ⓜ️ Ⓜ️ Ⓜ️ Ⓜ️ Ⓜ️ GeocodingService: Ⓜ️';

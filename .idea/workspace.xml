@@ -6,28 +6,21 @@
     </shared>
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="960a3068-0221-4322-9fd2-c05f69aa497e" name="Default Changelist" comment="added geocoding to resolve location info  ✅">
-      <change afterPath="$PROJECT_DIR$/lib/notif_receiver.dart" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/lib/services/hive_db.dart" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/lib/util/notifications_service.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.flutter-plugins" beforeDir="false" afterPath="$PROJECT_DIR$/.flutter-plugins" afterDir="false" />
+    <list default="true" id="960a3068-0221-4322-9fd2-c05f69aa497e" name="Default Changelist" comment="merged activity data with location coors 🧡">
       <change beforePath="$PROJECT_DIR$/.flutter-plugins-dependencies" beforeDir="false" afterPath="$PROJECT_DIR$/.flutter-plugins-dependencies" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/libraries/Dart_Packages.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/libraries/Dart_Packages.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/libraries/Flutter_Plugins.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/libraries/Flutter_Plugins.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/android/app/src/main/AndroidManifest.xml" beforeDir="false" afterPath="$PROJECT_DIR$/android/app/src/main/AndroidManifest.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ios/Podfile.lock" beforeDir="false" afterPath="$PROJECT_DIR$/ios/Podfile.lock" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/dio_client.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/services/dio_client.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/events_page.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/events_page.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/geocoding_service.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/services/geocoding_service.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/geofence_location.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/geofence_location.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/geofence_page.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/geofence_page.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/hive_db.dart" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/events_page.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/ui/events_page.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/functions_and_shit.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/util/functions_and_shit.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/geofence_location.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/data_models/geofence_location.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/geofence_page.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/ui/geofence_page.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/health_page.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/ui/health_page.dart" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/lib/main.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/main.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/map.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/map.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/net.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/services/net.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/service_le_geofence.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/services/service_le_geofence.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/pubspec.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/pubspec.yaml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/map.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/ui/map.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/notif_receiver.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/ui/notif_receiver.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/services/geocoding_service.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/services/geocoding_service.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/services/hive_db.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/services/hive_db.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/services/service_le_geofence.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/services/service_le_geofence.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/util/notifications_service.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/util/notifications_service.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/util/util.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/util/util.dart" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -70,7 +63,7 @@
     <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
     <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
     <property name="SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
-    <property name="com.google.cloudcode.ide_session_index" value="20210518_0014" />
+    <property name="com.google.cloudcode.ide_session_index" value="20210518_0015" />
     <property name="dart.analysis.tool.window.visible" value="false" />
     <property name="io.flutter.reload.alreadyRun" value="true" />
     <property name="last_opened_file_path" value="$PROJECT_DIR$/lib" />
@@ -84,6 +77,9 @@
       <recent name="$PROJECT_DIR$/android/app/src/main/res/drawable" />
     </key>
     <key name="MoveFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/lib/ui" />
+      <recent name="$PROJECT_DIR$/lib/util" />
+      <recent name="$PROJECT_DIR$/lib/data_models" />
       <recent name="$PROJECT_DIR$/lib/services" />
     </key>
   </component>
@@ -186,7 +182,14 @@
       <option name="project" value="LOCAL" />
       <updated>1621230432237</updated>
     </task>
-    <option name="localTasksCounter" value="13" />
+    <task id="LOCAL-00013" summary="merged activity data with location coors 🧡">
+      <created>1621343146348</created>
+      <option name="number" value="00013" />
+      <option name="presentableId" value="LOCAL-00013" />
+      <option name="project" value="LOCAL" />
+      <updated>1621343146348</updated>
+    </task>
+    <option name="localTasksCounter" value="14" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -213,6 +216,7 @@
     <MESSAGE value="refactored geofencing - switched plugin " />
     <MESSAGE value="refactored geofencing II  " />
     <MESSAGE value="added geocoding to resolve location info  ✅" />
-    <option name="LAST_COMMIT_MESSAGE" value="added geocoding to resolve location info  ✅" />
+    <MESSAGE value="merged activity data with location coors " />
+    <option name="LAST_COMMIT_MESSAGE" value="merged activity data with location coors " />
   </component>
 </project>

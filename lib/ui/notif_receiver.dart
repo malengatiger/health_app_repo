@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:health_app_repo/util/functions.dart';
-
-import 'functions_and_shit.dart';
+import 'package:health_app_repo/util/functions_and_shit.dart';
 
 class NotifReceiver extends StatefulWidget {
   final String payload;

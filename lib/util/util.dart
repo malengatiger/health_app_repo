@@ -4,7 +4,7 @@ import 'package:connectivity/connectivity.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart' as DotEnv;
 
-import '../functions_and_shit.dart';
+import 'functions_and_shit.dart';
 
 Future<String> getBaseUrl() async {
   await DotEnv.load(fileName: '.env');

@@ -5,13 +5,13 @@ import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
-import 'package:health_app_repo/functions_and_shit.dart';
-import 'package:health_app_repo/geofence_location.dart';
+import 'package:health_app_repo/data_models/geofence_location.dart';
 import 'package:health_app_repo/services/hive_db.dart';
 import 'package:health_app_repo/util/functions.dart';
+import 'package:health_app_repo/util/functions_and_shit.dart';
 import 'package:health_app_repo/util/snack.dart';
 
-import 'services/geocoding_service.dart';
+import '../services/geocoding_service.dart';
 
 class GeofenceMap extends StatefulWidget {
   @override

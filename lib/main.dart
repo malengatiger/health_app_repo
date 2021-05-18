@@ -1,18 +1,20 @@
 import 'package:flutter/material.dart';
 import 'package:geofence_service/geofence_service.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:health_app_repo/ui/geofence_page.dart';
 import 'package:health_app_repo/util/notifications_service.dart';
 
-import 'functions_and_shit.dart';
-import 'geofence_page.dart';
+import 'util/functions_and_shit.dart';
 
 const mm = '🖐🏽🖐🏽🖐🏽🖐🏽🖐🏽🖐🏽 Material App: ';
 
 void main() async {
-  pp('$mm App main: FlutterLocalNotificationsPlugin initializing ...');
+  pp('$mm Preparing for Stanley Black & Decker $mm');
   WidgetsFlutterBinding.ensureInitialized();
 
   runApp(MyApp());
+
+  pp('$mm Preparation for Stanley Black & Decker started OK $mm');
 }
 
 class MyApp extends StatelessWidget {
@@ -20,6 +22,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     notificationService = NotificationService(context);
+    pp('$mm NotificationService constructed ... 🍎 and hopefully initialized 🍎 $mm');
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       theme: ThemeData(

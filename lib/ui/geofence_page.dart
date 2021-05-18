@@ -6,17 +6,16 @@ import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:geofence_service/geofence_service.dart';
 import 'package:geolocator/geolocator.dart';
-import 'package:health_app_repo/events_page.dart';
-import 'package:health_app_repo/geofence_location.dart';
-import 'package:health_app_repo/health_page.dart';
-import 'package:health_app_repo/map.dart';
+import 'package:health_app_repo/data_models/geofence_location.dart';
 import 'package:health_app_repo/services/hive_db.dart';
+import 'package:health_app_repo/services/service_le_geofence.dart';
+import 'package:health_app_repo/ui/events_page.dart';
+import 'package:health_app_repo/ui/health_page.dart';
+import 'package:health_app_repo/ui/map.dart';
 import 'package:health_app_repo/util/functions.dart';
+import 'package:health_app_repo/util/functions_and_shit.dart';
 import 'package:health_app_repo/util/util.dart';
 import 'package:page_transition/page_transition.dart';
-
-import 'functions_and_shit.dart';
-import 'services/service_le_geofence.dart';
 
 class GeofencePage extends StatefulWidget {
   @override

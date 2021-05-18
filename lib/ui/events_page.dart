@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:health_app_repo/services/hive_db.dart';
 import 'package:health_app_repo/util/functions.dart';
 
-import 'functions_and_shit.dart';
-import 'geofence_location.dart';
+import '../data_models/geofence_location.dart';
+import '../util/functions_and_shit.dart';
 
 class EventsPage extends StatefulWidget {
   @override

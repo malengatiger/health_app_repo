@@ -1,5 +1,5 @@
-import 'package:health_app_repo/functions_and_shit.dart';
-import 'package:health_app_repo/geofence_location.dart';
+import 'package:health_app_repo/data_models/geofence_location.dart';
+import 'package:health_app_repo/util/functions_and_shit.dart';
 import 'package:health_app_repo/util/util.dart';
 import 'package:hive/hive.dart';
 import 'package:path_provider/path_provider.dart' as path_provider;
