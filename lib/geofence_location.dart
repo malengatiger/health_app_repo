@@ -65,3 +65,35 @@ class GeofenceLocationEvent {
             geofenceLocation == null ? null : geofenceLocation!.toJson()
       };
 }
+
+class ActivityEvent {
+  String? eventId;
+  String? date, type, confidence;
+  double? latitude, longitude;
+
+  ActivityEvent(
+      {required this.eventId,
+      required this.latitude,
+      required this.date,
+      required this.longitude,
+      required this.type,
+      required this.confidence});
+
+  ActivityEvent.fromJson(Map data) {
+    this.eventId = data['eventId'];
+    this.date = data['date'];
+    this.latitude = data['latitude'];
+    this.longitude = data['longitude'];
+    this.type = data['type'];
+    this.confidence = data['confidence'];
+  }
+
+  Map<String, dynamic> toJson() => <String, dynamic>{
+        'eventId': eventId,
+        'date': date,
+        'latitude': latitude,
+        'longitude': longitude,
+        'confidence': confidence,
+        'type': type,
+      };
+}

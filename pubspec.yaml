@@ -3,7 +3,7 @@ description: App to exercise Health and Geofencing
 
 publish_to: 'none' # Remove this line if you wish to publish to pub.dev
 
-version: 1.0.8
+version: 1.0.12
 
 environment:
   sdk: ">=2.12.0 <3.0.0"
@@ -14,7 +14,7 @@ dependencies:
 
   cupertino_icons: ^1.0.3
   geofence_service: ^3.0.3
-  geolocator: ^7.0.3
+#  geolocator: ^7.0.3
   flutter_local_notifications: ^5.0.0+4
   ansicolor: ^2.0.1
   logging: ^1.0.1
@@ -29,14 +29,15 @@ dependencies:
   intl: ^0.17.0
   http: ^0.13.3
   uuid: ^3.0.4
-  flutter_dotenv: ^4.0.0-nullsafety.0
-  google_fonts: ^2.0.0
+  flutter_dotenv: ^4.0.0-nullsafety.1
+  google_fonts: ^2.1.0
   connectivity: ^3.0.3
   permission_handler: ^7.1.0
-  page_transition: ^2.0.1-nullsafety.0
+  page_transition: ^2.0.2
   health: ^3.0.5
   geocoding: ^2.0.0
-
+  flutter_native_timezone: ^1.0.10
+  rxdart: ^0.27.0
 
 dev_dependencies:
   flutter_test:

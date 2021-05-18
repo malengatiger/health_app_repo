@@ -10,13 +10,13 @@ import 'package:health_app_repo/events_page.dart';
 import 'package:health_app_repo/geofence_location.dart';
 import 'package:health_app_repo/health_page.dart';
 import 'package:health_app_repo/map.dart';
+import 'package:health_app_repo/services/hive_db.dart';
 import 'package:health_app_repo/util/functions.dart';
 import 'package:health_app_repo/util/util.dart';
 import 'package:page_transition/page_transition.dart';
 
 import 'functions_and_shit.dart';
-import 'hive_db.dart';
-import 'service_le_geofence.dart';
+import 'services/service_le_geofence.dart';
 
 class GeofencePage extends StatefulWidget {
   @override
@@ -37,10 +37,6 @@ class _GeofencePageState extends State<GeofencePage>
     _checkConnectivity();
   }
 
-  // late Stream<ActivityEvent> activityStream;
-  // ActivityEvent latestActivity = ActivityEvent.empty();
-  // List<ActivityEvent> _events = [];
-  // ActivityRecognition activityRecognition = ActivityRecognition.instance;
   StreamSubscription<ConnectivityResult>? _subscription;
   Position? _position;
   bool busy = false;
@@ -90,7 +86,7 @@ class _GeofencePageState extends State<GeofencePage>
 
   Future _getEvents() async {
     pp('$mm getGeofenceEvents: getting events from local disk ...');
-    _geofenceEvents = await LocalDB.getGeofenceEvents();
+    _geofenceEvents = await localDB.getGeofenceEvents();
   }
 
   Future _startFences() async {
@@ -98,8 +94,15 @@ class _GeofencePageState extends State<GeofencePage>
     setState(() {
       busy = true;
     });
+
+    await localDB.initializeHive();
     _position = await Geolocator.getCurrentPosition();
-    _geofenceLocations = await LocalDB.getGeofenceLocations();
+    _geofenceLocations = await localDB.getGeofenceLocations();
+
+    if (_geofenceLocations.isEmpty) {
+      _navigateToMap();
+      return null;
+    }
     await serviceLeGeofence.buildGeofences(locations: _geofenceLocations);
 
     pp('$mm ..... startFences: 🍎 '
@@ -119,9 +122,7 @@ class _GeofencePageState extends State<GeofencePage>
             type: PageTransitionType.scale,
             alignment: Alignment.topLeft,
             duration: Duration(milliseconds: 1000),
-            child: EventsPage(
-              events: _geofenceEvents,
-            )));
+            child: EventsPage()));
     _startFences();
   }
 
@@ -135,6 +136,7 @@ class _GeofencePageState extends State<GeofencePage>
             duration: Duration(milliseconds: 1000),
             child: GeofenceMap()));
 
+    await _getEvents();
     _startFences();
   }
 
@@ -290,7 +292,7 @@ class _GeofencePageState extends State<GeofencePage>
                                         children: [
                                           Row(
                                             mainAxisAlignment:
-                                                MainAxisAlignment.center,
+                                                MainAxisAlignment.start,
                                             children: [
                                               SizedBox(
                                                   width: 80,
@@ -312,7 +314,7 @@ class _GeofencePageState extends State<GeofencePage>
                                           ),
                                           Row(
                                             mainAxisAlignment:
-                                                MainAxisAlignment.center,
+                                                MainAxisAlignment.start,
                                             children: [
                                               SizedBox(
                                                   width: 80,
@@ -388,7 +390,7 @@ class _GeofencePageState extends State<GeofencePage>
                                   if (geo.status.toString().contains('ENTER')) {
                                     var card = Card(
                                       elevation: 4,
-                                      color: Colors.teal[300],
+                                      color: Colors.amber[800],
                                       child: Padding(
                                         padding: const EdgeInsets.all(24.0),
                                         child: Column(
@@ -459,10 +461,10 @@ class _GeofencePageState extends State<GeofencePage>
                         SizedBox(
                           height: 24,
                         ),
-                        StreamBuilder<Activity>(
+                        StreamBuilder<ActivityEvent>(
                             stream: serviceLeGeofence.activityStream,
                             builder: (context, snapshot) {
-                              Activity? act;
+                              ActivityEvent? act;
                               if (snapshot.hasData) {
                                 act = snapshot.data;
                               }

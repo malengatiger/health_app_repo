@@ -2,8 +2,8 @@ import 'dart:async';
 
 import 'package:geofence_service/geofence_service.dart';
 
-import 'functions_and_shit.dart';
-import 'geofence_location.dart';
+import '../functions_and_shit.dart';
+import '../geofence_location.dart';
 import 'hive_db.dart';
 
 final ServiceLeGeofence serviceLeGeofence = ServiceLeGeofence.instance;
@@ -50,10 +50,10 @@ class ServiceLeGeofence {
       StreamController<Geofence>.broadcast();
   Stream<Geofence> get geofenceStream => _geofenceStreamController.stream;
 
-  StreamController<Activity> _activityStreamController =
-      StreamController<Activity>.broadcast();
+  StreamController<ActivityEvent> _activityStreamController =
+      StreamController<ActivityEvent>.broadcast();
 
-  Stream<Activity> get activityStream => _activityStreamController.stream;
+  Stream<ActivityEvent> get activityStream => _activityStreamController.stream;
 
   close() {
     _geofenceStreamController.close();
@@ -69,13 +69,6 @@ class ServiceLeGeofence {
     pp('$mm _onGeofenceStatusChanged 🔊 geofenceRadius: ${geofenceRadius.toMap()}');
     pp('$mm _onGeofenceStatusChanged 🔊 geofenceStatus: 💚 ${geofenceStatus.toString()} 💚 \n');
 
-    GeofenceLocation? location;
-    locations.forEach((element) {
-      if (element.name == geofence.id) {
-        location = element;
-      }
-    });
-
     bool entered = false, dwelled = false, exited = false;
 
     if (geofence.status.toString().contains('ENTER')) {
@@ -88,27 +81,45 @@ class ServiceLeGeofence {
       exited = true;
     }
 
-    if (location != null) {
-      var e = GeofenceLocationEvent(
-          eventId: geofence.timestamp!.toIso8601String(),
-          geofenceLocation: location,
-          date: geofence.timestamp!.toIso8601String(),
-          entered: entered,
-          dwelled: dwelled,
-          exited: exited);
+    var geo = GeofenceLocation(
+        locationId: geofence.data['locationId'],
+        name: geofence.data['name'],
+        latitude: geofence.latitude,
+        longitude: geofence.longitude);
 
-      await LocalDB.addGeofenceLocationEvent(e);
-      pp('$mm _onGeofenceStatusChanged: added event to local disk: 🌺  ${e.toJson()}  🌺 ');
-    }
+    var locationEvent = GeofenceLocationEvent(
+        eventId: geofence.timestamp!.toIso8601String(),
+        geofenceLocation: geo,
+        date: geofence.timestamp!.toIso8601String(),
+        entered: entered,
+        dwelled: dwelled,
+        exited: exited);
+
+    await localDB.addGeofenceLocationEvent(locationEvent);
+    pp('$mm _onGeofenceStatusChanged: added event to local disk: 🌺  ${locationEvent.toJson()}  🌺 ');
 
     _geofenceStreamController.sink.add(geofence);
   }
 
-  void _onActivityChanged(Activity prevActivity, Activity currActivity) {
-    pp('\n\n$mm _onActivityChanged: 🌀 🌀 🌀 previous Activity: ${prevActivity.toMap()}');
-    pp('$mm _onActivityChanged: 🌀 🌀 🌀 current Activity: ${currActivity.toMap()}\n');
+  void _onActivityChanged(Activity prevActivity, Activity currActivity) async {
+    pp('\n\n$mm _onActivityChanged: 🌀 🌀 🌀 previous Activity:  😎 ${prevActivity.toMap()}  😎 ');
+    pp('$mm _onActivityChanged: 🌀 🌀 🌀 current Activity:  😎 ${currActivity.toMap()} 😎 \n');
 
-    _activityStreamController.sink.add(currActivity);
+    var pos = await Geolocator.getCurrentPosition();
+    var event = ActivityEvent(
+        eventId: DateTime.now().toIso8601String(),
+        latitude: pos.latitude,
+        date: DateTime.now().toIso8601String(),
+        longitude: pos.longitude,
+        type: currActivity.type.toString(),
+        confidence: currActivity.confidence.toString());
+
+    if (currActivity.confidence == ActivityConfidence.HIGH) {
+      pp('$mm _onActivityChanged: 🌀 🌀 🌀 saving activity event on disk ... 😎 😎 ${event.toJson()} 😎 😎');
+      localDB.addActivity(event);
+    }
+
+    _activityStreamController.sink.add(event);
   }
 
   void _onError(dynamic error) {

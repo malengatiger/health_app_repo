@@ -1,15 +1,17 @@
 import 'dart:async';
 import 'dart:collection';
+import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:health_app_repo/functions_and_shit.dart';
 import 'package:health_app_repo/geofence_location.dart';
-import 'package:health_app_repo/hive_db.dart';
+import 'package:health_app_repo/services/hive_db.dart';
 import 'package:health_app_repo/util/functions.dart';
+import 'package:health_app_repo/util/snack.dart';
 
-import 'geocoding_service.dart';
+import 'services/geocoding_service.dart';
 
 class GeofenceMap extends StatefulWidget {
   @override
@@ -24,6 +26,8 @@ class _GeofenceMapState extends State<GeofenceMap>
   CameraPosition? _myCurrentCameraPosition;
   static const mm = '💙 💙 💙 💙 💙 💙 Map: ';
   List<GeofenceLocation> _geofenceLocations = [];
+  var _key = GlobalKey<ScaffoldState>();
+  bool busy = false;
 
   @override
   void initState() {
@@ -54,7 +58,16 @@ class _GeofenceMapState extends State<GeofenceMap>
 
   void _getGeofenceLocations() async {
     pp('$mm _getGeofenceLocations ... .....................');
-    _geofenceLocations = await LocalDB.getGeofenceLocations();
+    _geofenceLocations = await localDB.getGeofenceLocations();
+    if (_geofenceLocations.isEmpty) {
+      AppSnackBar.showSnackBar(
+          scaffoldKey: _key,
+          message:
+              'Please long press on the map to create a geofence.The geofences will have a standard radius of 200 metres',
+          textColor: Colors.white,
+          backgroundColor: Colors.black);
+      return;
+    }
     _addMarkers();
   }
 
@@ -102,13 +115,14 @@ class _GeofenceMapState extends State<GeofenceMap>
     pp('$mm _clearEverything ....  ');
     _geofenceLocations.clear();
     _markers.clear();
-    await LocalDB.deleteGeofenceLocations();
+    await localDB.deleteGeofenceLocations();
     setState(() {});
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      key: _key,
       appBar: AppBar(
         leading: IconButton(
             icon: Icon(Icons.arrow_back_ios),
@@ -126,7 +140,10 @@ class _GeofenceMapState extends State<GeofenceMap>
       body: _myCurrentCameraPosition == null
           ? Center(
               child: Container(
-                child: Text('Waiting for location'),
+                child: Text(
+                  'Waiting for location ...',
+                  style: Styles.greyLabelMedium,
+                ),
               ),
             )
           : GoogleMap(
@@ -143,6 +160,8 @@ class _GeofenceMapState extends State<GeofenceMap>
     );
   }
 
+  Random _random = Random(DateTime.now().millisecondsSinceEpoch);
+
   void _onLongPress(LatLng latLng) async {
     pp('$mm onLongPress latLng: 🍎 lat: ${latLng.latitude} lng: ${latLng.longitude}');
     var placeMark = await GeocodingService.getPlacemark(
@@ -151,14 +170,14 @@ class _GeofenceMapState extends State<GeofenceMap>
         locationId: DateTime.now().toIso8601String(),
         name: placeMark == null
             ? 'Geofence  🍎 ${_geofenceLocations.length + 1}'
-            : '${placeMark.street} 🍎 ${placeMark.locality}',
+            : '${placeMark.street} ${placeMark.locality} x${_random.nextInt(100)}',
         latitude: latLng.latitude,
         longitude: latLng.longitude);
 
     pp('$mm onLongPress: adding geofenceLocation: ✅  ✅  ✅ ${loc.toJson()} ');
     _geofenceLocations.add(loc);
     _addMarker(loc);
-    await LocalDB.addGeofenceLocation(loc);
+    await localDB.addGeofenceLocation(loc);
     setState(() {});
   }
 
