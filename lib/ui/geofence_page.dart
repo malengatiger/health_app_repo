@@ -9,6 +9,7 @@ import 'package:geolocator/geolocator.dart';
 import 'package:health_app_repo/data_models/geofence_location.dart';
 import 'package:health_app_repo/services/hive_db.dart';
 import 'package:health_app_repo/services/service_le_geofence.dart';
+import 'package:health_app_repo/ui/activity_map.dart';
 import 'package:health_app_repo/ui/events_page.dart';
 import 'package:health_app_repo/ui/health_page.dart';
 import 'package:health_app_repo/ui/map.dart';
@@ -139,6 +140,19 @@ class _GeofencePageState extends State<GeofencePage>
     _startFences();
   }
 
+  void _navigateToActivityMap() async {
+    pp('$mm ..... _navigateToActivityMap  ....');
+    Navigator.push(
+        context,
+        PageTransition(
+            type: PageTransitionType.scale,
+            alignment: Alignment.topLeft,
+            duration: Duration(milliseconds: 1000),
+            child: ActivityMap()));
+
+    _startFences();
+  }
+
   void _navigateToHealthData() async {
     pp('$mm ..... _navigateToMap  ....');
     await Navigator.push(
@@ -192,6 +206,15 @@ class _GeofencePageState extends State<GeofencePage>
               ),
               onPressed: () {
                 _navigateToMap();
+              }),
+          IconButton(
+              icon: Icon(
+                Icons.map_outlined,
+                size: 20,
+                color: Colors.pink,
+              ),
+              onPressed: () {
+                _navigateToActivityMap();
               }),
           IconButton(
               icon: Icon(

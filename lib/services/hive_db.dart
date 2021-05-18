@@ -130,4 +130,12 @@ class LocalDB {
         'geoLocationEventBox.isOpen: ${geoLocationEventBox!.isOpen}');
     p('$aa GeofenceLocationEvents deleted from Disk: 🍎');
   }
+
+  Future deleteActivityEvents() async {
+    await activityBox!.deleteFromDisk();
+    activityBox = await Hive.openBox("activityBox");
+    p('$aa Hive activityBox:  🔵  .... '
+        'activityBox.isOpen: ${activityBox!.isOpen}');
+    p('$aa ActivityEvents deleted from Disk: 🍎');
+  }
 }
