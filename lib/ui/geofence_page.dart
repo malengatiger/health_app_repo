@@ -7,6 +7,7 @@ import 'package:flutter/rendering.dart';
 import 'package:geofence_service/geofence_service.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:health_app_repo/data_models/geofence_location.dart';
+import 'package:health_app_repo/services/cron_service.dart';
 import 'package:health_app_repo/services/hive_db.dart';
 import 'package:health_app_repo/services/service_le_geofence.dart';
 import 'package:health_app_repo/ui/activity_map.dart';
@@ -32,9 +33,19 @@ class _GeofencePageState extends State<GeofencePage>
   void initState() {
     _controller = AnimationController(vsync: this);
     super.initState();
+    cronService.startMyLocationScheduler(2, _onSchedule);
     initLog();
     logger.info('$mm ........... Geofence Builder has started ...');
     _checkConnectivity();
+  }
+
+  var _locationMessages = <String>[];
+
+  void _onSchedule(String message) {
+    pp('$mm Location message coming in: 💦  💦  💦 $message');
+    setState(() {
+      _locationMessages.add(message);
+    });
   }
 
   StreamSubscription<ConnectivityResult>? _subscription;
@@ -98,11 +109,19 @@ class _GeofencePageState extends State<GeofencePage>
     await localDB.initializeHive();
     _position = await Geolocator.getCurrentPosition();
     _geofenceLocations = await localDB.getGeofenceLocations();
-
+    pp('$mm _startFences: locations found 🛎 ${_geofenceLocations.length} geofences ...');
     if (_geofenceLocations.isEmpty) {
       _navigateToMap();
       return null;
     }
+    var list = <GeofenceLocation>[];
+    _geofenceLocations.forEach((element) async {
+      if (element.name != null) {
+        list.add(element);
+      }
+    });
+    _geofenceLocations = list;
+    pp('$mm _startFences: locations filtered: 🛎 ${_geofenceLocations.length} geofences 🛎 ...');
     await serviceLeGeofence.buildGeofences(locations: _geofenceLocations);
 
     pp('$mm ..... startFences: 🍎 '
@@ -543,6 +562,36 @@ class _GeofencePageState extends State<GeofencePage>
                                 ),
                               );
                             }),
+                        SizedBox(
+                          height: 20,
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.only(left: 20.0),
+                          child: Container(
+                            height: 600,
+                            child: ListView.builder(
+                                itemCount: _locationMessages.length,
+                                itemBuilder: (_, index) {
+                                  var msg =
+                                      '${_locationMessages.elementAt(index)}';
+                                  return Row(
+                                    children: [
+                                      Icon(
+                                        Icons.location_on,
+                                        color: Theme.of(context).primaryColor,
+                                      ),
+                                      SizedBox(
+                                        width: 12,
+                                      ),
+                                      Text(
+                                        msg,
+                                        style: Styles.greyLabelSmall,
+                                      ),
+                                    ],
+                                  );
+                                }),
+                          ),
+                        ),
                       ],
                     ),
                   ),

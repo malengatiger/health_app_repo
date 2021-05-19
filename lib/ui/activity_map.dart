@@ -84,6 +84,30 @@ class _ActivityMapState extends State<ActivityMap>
   void _getActivityEvents() async {
     pp('$mm _getActivityEvents ... .....................');
     _activityEvents = await localDB.getActivities();
+    //remove events that are in the 'same' coord
+    _activityEvents.sort((a, b) => b.date!.compareTo(a.date!));
+    pp('$mm _getActivityEvents ... ........ 🍎 number of events: ${_activityEvents.length}, to be filtered by distance');
+    int index = 0;
+    ActivityEvent? prev;
+    List<ActivityEvent> list = [];
+    for (var act in _activityEvents) {
+      if (index > 0) {
+        if (prev != null) {
+          var distance = Geolocator.distanceBetween(
+              prev.latitude!, prev.longitude!, act.latitude!, act.longitude!);
+          if (distance > 50) {
+            pp('$mm found event greater than 50 metres away ${act.date}');
+            list.add(act);
+          }
+        } else {
+          list.add(act);
+        }
+      }
+      prev = act;
+      index++;
+    }
+    _activityEvents = list;
+    pp('$mm _getActivityEvents ... ........ 🍎 number of filtered events: ${_activityEvents.length}');
     _addMarkers();
   }
 

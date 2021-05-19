@@ -16,7 +16,7 @@ class ServiceLeGeofence {
   ServiceLeGeofence._privateConstructor() {
     pp('$mm ... ServiceLeGeofence._privateConstructor has been initialized : 🌺 🌺 🌺 🌺 🌺 '
         '${DateTime.now().toIso8601String()} 🌺');
-    init();
+    _init();
   }
 
   static const INTERVAL = 5000,
@@ -27,7 +27,7 @@ class ServiceLeGeofence {
 
   late GeofenceService geofenceService;
 
-  init() {
+  _init() {
     pp('$mm ... GeofenceService is about to set up configuration settings. 🛎 🛎 🛎 🛎 ');
     geofenceService = GeofenceService.instance.setup(
         interval: INTERVAL,
@@ -38,12 +38,16 @@ class ServiceLeGeofence {
         allowMockLocations: false,
         geofenceRadiusSortType: GeofenceRadiusSortType.DESC);
 
-    pp('$mm ...  GeofenceService.instance.setup: configuration settings has completed OK. 🛎 '
+    pp('$mm ... GeofenceService.instance.setup: configuration settings has completed OK. 🛎 '
         'isRunningService: 🌺 ${geofenceService.isRunningService} 🌺');
-
-    geofenceService.addGeofenceStatusChangedListener(_onGeofenceStatusChanged);
-    geofenceService.addActivityChangedListener(_onActivityChanged);
-    geofenceService.addStreamErrorListener(_onError);
+    try {
+      geofenceService
+          .addGeofenceStatusChangedListener(_onGeofenceStatusChanged);
+      geofenceService.addActivityChangedListener(_onActivityChanged);
+      geofenceService.addStreamErrorListener(_onError);
+    } catch (e) {
+      pp('👿 👿 👿 👿 👿 👿 👿 geofenceService.addStreamErrorListener: $e 👿 👿 ');
+    }
   }
 
   StreamController<Geofence> _geofenceStreamController =
@@ -85,7 +89,8 @@ class ServiceLeGeofence {
         locationId: geofence.data['locationId'],
         name: geofence.data['name'],
         latitude: geofence.latitude,
-        longitude: geofence.longitude);
+        longitude: geofence.longitude,
+        radius: geofenceRadius.length);
 
     var locationEvent = GeofenceLocationEvent(
         eventId: geofence.timestamp!.toIso8601String(),
@@ -93,10 +98,11 @@ class ServiceLeGeofence {
         date: geofence.timestamp!.toIso8601String(),
         entered: entered,
         dwelled: dwelled,
-        exited: exited);
+        exited: exited,
+        radius: geofenceRadius.length);
 
     await localDB.addGeofenceLocationEvent(locationEvent);
-    pp('$mm _onGeofenceStatusChanged: added event to local disk: 🌺  ${locationEvent.toJson()}  🌺 ');
+    pp('$mm _onGeofenceStatusChanged: 🔵 🔵 🔵 🔵 🔵 🔵 added event to local disk: 🌺  ${locationEvent.toJson()}  🌺 ');
 
     _geofenceStreamController.sink.add(geofence);
   }
@@ -125,11 +131,11 @@ class ServiceLeGeofence {
   void _onError(dynamic error) {
     final errorCode = getErrorCodesFromError(error);
     if (errorCode == null) {
-      pp('Undefined error: $error');
+      pp('👿 👿 👿 👿 Undefined error: $error');
       return;
     }
 
-    pp('ErrorCode: $errorCode');
+    pp('$mm 👿 👿 👿 👿 👿 👿 👿 👿 👿 👿 👿 👿 👿 ErrorCode: $errorCode 👿 👿 👿 ');
     throw Exception('$errorCode');
   }
 
@@ -140,21 +146,24 @@ class ServiceLeGeofence {
     pp('$mm buildGeofences: requesting permission to build 🛎 ${locations.length} geofences ...');
     this.locations = locations;
 
+    int cnt = 0;
     locations.forEach((element) async {
-      var fence = Geofence(
-          id: element.name!,
-          latitude: element.latitude!,
-          longitude: element.longitude!,
-          data: element.toJson(),
-          radius: [
-            GeofenceRadius(id: 'radius_100m', length: 100),
-            // GeofenceRadius(id: 'radius_25m', length: 25),
-            // GeofenceRadius(id: 'radius_250m', length: 250),
-            // GeofenceRadius(id: 'radius_200m', length: 200)
-          ]);
+      if (element.name != null) {
+        var fence = Geofence(
+            id: element.name!,
+            latitude: element.latitude!,
+            longitude: element.longitude!,
+            data: element.toJson(),
+            radius: [
+              // GeofenceRadius(id: 'radius_100m', length: 100),
+              GeofenceRadius(id: 'radius_200m', length: 200),
+              // GeofenceRadius(id: 'radius_300m', length: 300)
+            ]);
 
-      geofences.add(fence);
-      pp('\t$mm buildGeofences: ✅ Geofence created : ${fence.id}');
+        geofences.add(fence);
+        cnt++;
+        pp('\t$mm buildGeofences: ✅ #$cnt Geofence created : ${fence.id}');
+      }
     });
 
     geofenceService.addGeofenceList(geofences);

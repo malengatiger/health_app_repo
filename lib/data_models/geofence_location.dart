@@ -1,12 +1,15 @@
 class GeofenceLocation {
   String? locationId, name;
   double? latitude, longitude;
+  double? radius;
 
-  GeofenceLocation({this.locationId, this.name, this.latitude, this.longitude});
+  GeofenceLocation(
+      {this.locationId, this.name, this.latitude, this.longitude, this.radius});
 
   GeofenceLocation.fromJson(Map data) {
     this.locationId = data['locationId'];
     this.name = data['name'];
+    this.radius = data['radius'];
 
     if (data['latitude'] is int) {
       this.latitude = data['latitude'] * 1.0;
@@ -23,6 +26,7 @@ class GeofenceLocation {
   Map<String, dynamic> toJson() => <String, dynamic>{
         'locationId': locationId,
         'name': name,
+        'radius': radius,
         'latitude': latitude,
         'longitude': longitude,
       };
@@ -33,6 +37,7 @@ class GeofenceLocationEvent {
   String? date;
   GeofenceLocation? geofenceLocation;
   bool? entered, dwelled, exited;
+  double? radius;
 
   GeofenceLocationEvent(
       {required this.eventId,
@@ -40,7 +45,8 @@ class GeofenceLocationEvent {
       required this.date,
       required this.entered,
       required this.dwelled,
-      required this.exited});
+      required this.exited,
+      this.radius});
 
   GeofenceLocationEvent.fromJson(Map data) {
     this.eventId = data['eventId'];
@@ -48,6 +54,7 @@ class GeofenceLocationEvent {
     this.entered = data['entered'];
     this.dwelled = data['dwelled'];
     this.exited = data['exited'];
+    this.radius = data['radius'];
 
     if (data['geofenceLocation'] != null) {
       this.geofenceLocation =
@@ -61,6 +68,7 @@ class GeofenceLocationEvent {
         'entered': entered,
         'dwelled': dwelled,
         'exited': exited,
+        'radius': radius,
         'geofenceLocation':
             geofenceLocation == null ? null : geofenceLocation!.toJson()
       };

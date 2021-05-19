@@ -7,10 +7,17 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="960a3068-0221-4322-9fd2-c05f69aa497e" name="Default Changelist" comment="cleaned up localDB and added activity map 💜">
-      <change afterPath="$PROJECT_DIR$/assets/markers/footprint.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/lib/data_models/my_location.dart" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/lib/services/cron_service.dart" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.flutter-plugins-dependencies" beforeDir="false" afterPath="$PROJECT_DIR$/.flutter-plugins-dependencies" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/libraries/Dart_Packages.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/libraries/Dart_Packages.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/health_app_repo.iml" beforeDir="false" afterPath="$PROJECT_DIR$/health_app_repo.iml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/data_models/geofence_location.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/data_models/geofence_location.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/services/hive_db.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/services/hive_db.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/services/service_le_geofence.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/services/service_le_geofence.dart" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/lib/ui/activity_map.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/ui/activity_map.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/ui/geofence_page.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/ui/geofence_page.dart" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/pubspec.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/pubspec.yaml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -22,8 +29,8 @@
     <option name="RECENT_TEMPLATES">
       <list>
         <option value="stateless_widget" />
-        <option value="Dart File" />
         <option value="animated_widget" />
+        <option value="Dart File" />
       </list>
     </option>
   </component>
@@ -54,7 +61,7 @@
     <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
     <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
     <property name="SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
-    <property name="com.google.cloudcode.ide_session_index" value="20210518_0017" />
+    <property name="com.google.cloudcode.ide_session_index" value="20210519_0011" />
     <property name="dart.analysis.tool.window.visible" value="false" />
     <property name="io.flutter.reload.alreadyRun" value="true" />
     <property name="last_opened_file_path" value="$PROJECT_DIR$/assets" />

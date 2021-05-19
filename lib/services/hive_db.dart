@@ -1,4 +1,5 @@
 import 'package:health_app_repo/data_models/geofence_location.dart';
+import 'package:health_app_repo/data_models/my_location.dart';
 import 'package:health_app_repo/util/functions_and_shit.dart';
 import 'package:health_app_repo/util/util.dart';
 import 'package:hive/hive.dart';
@@ -15,6 +16,7 @@ class LocalDB {
   Box? geoLocationBox;
   Box? geoLocationEventBox;
   Box? activityBox;
+  Box? myLocationBox;
 
   static const aa = '🔵 🔵 🔵 🔵 🔵 LocalDB(Hive): ';
   static final LocalDB instance = LocalDB._privateConstructor();
@@ -36,9 +38,11 @@ class LocalDB {
     geoLocationBox = await Hive.openBox("geoLocationBox");
     geoLocationEventBox = await Hive.openBox("geoLocationEventBox");
     activityBox = await Hive.openBox("geoLocationEventBox");
+    myLocationBox = await Hive.openBox("myLocationBox");
     p('$aa Hive geoLocationBox:  🔵  ....geoLocationBox.isOpen: ${geoLocationBox!.isOpen}');
     p('$aa Hive geoLocationEventBox:  🔵  ....geoLocationEventBox.isOpen: ${geoLocationEventBox!.isOpen}');
     p('$aa Hive activityBox:  🔵  ....activityBox.isOpen: ${activityBox!.isOpen}');
+    p('$aa Hive myLocationBox:  🔵  ....myLocationBox.isOpen: ${myLocationBox!.isOpen}');
 
     p('$aa Hive local data ready to rumble ....$aa');
     return '\n\n$aa Hive Initialized OK\n';
@@ -54,6 +58,12 @@ class LocalDB {
     await geoLocationBox!.put(location.locationId, location.toJson());
     p('$aa GeofenceLocation added or changed: 🍎 '
         'record: ${location.toJson()}');
+  }
+
+  Future addMyLocation(MyLocation myLocation) async {
+    await myLocationBox!.put(myLocation.myLocationId, myLocation.toJson());
+    p('$aa MyLocation added 🍎 '
+        'record: ${myLocation.toJson()}');
   }
 
   Future addActivity(ActivityEvent activity) async {
@@ -97,6 +107,17 @@ class LocalDB {
 
     p('$aa activityEvents found 🔵 ${activities.length}');
     return activities;
+  }
+
+  Future<List<MyLocation>> getMyLocations() async {
+    List<MyLocation> myLocations = [];
+    List values = myLocationBox!.values.toList();
+    values.forEach((element) {
+      myLocations.add(MyLocation.fromJson(element));
+    });
+
+    p('$aa MyLocations found 🔵 ${myLocations.length}');
+    return myLocations;
   }
 
   Future<GeofenceLocation?>? getGeofenceLocationById(String id) async {

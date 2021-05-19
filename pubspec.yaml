@@ -3,7 +3,7 @@ description: App to exercise Health and Geofencing
 
 publish_to: 'none' # Remove this line if you wish to publish to pub.dev
 
-version: 1.0.13
+version: 1.0.15
 
 environment:
   sdk: ">=2.12.0 <3.0.0"
@@ -38,6 +38,7 @@ dependencies:
   geocoding: ^2.0.0
   flutter_native_timezone: ^1.0.10
   rxdart: ^0.27.0
+  cron: ^0.3.0
 
 dev_dependencies:
   flutter_test:
